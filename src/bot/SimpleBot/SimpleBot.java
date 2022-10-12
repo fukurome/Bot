@@ -219,8 +219,7 @@ public class SimpleBot {
     public String[] sayInReturn(String message, String user_ID) {
         String answer= "";
         String key = "common";
-        if (message.equals("/help"))
-        {
+        if (message.equals("/help")) {
             String[] respond = {"Привет! Я бот Супа-Дупа. Мы можем с тобой поговорить о чём-нибудь, " +
                     "или я могу рассказать тебе анекдот.", "settings"};
             return respond;
