@@ -196,11 +196,10 @@ public class SimpleBot {
         random = new Random();
     }
 
-    public int countWordsInChat(String answer, String user_ID) {
+    public int countWordsInChat(String answer, String user_ID) throws FileNotFoundException, IOException {
         String directory = System.getProperty("user.dir");
         File file = new File(directory +"/" + user_ID + ".txt");
         int countWords = 0;
-        try {
             FileReader fr = new FileReader(file);
             BufferedReader reader = new BufferedReader(fr);
             String line = reader.readLine();
@@ -209,14 +208,9 @@ public class SimpleBot {
                     countWords++;
                 line = reader.readLine();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return countWords;
     }
-    public String[] sayInReturn(String message, String user_ID) {
+    public String[] sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException {
         String answer= "";
         String key = "common";
         if (message.equals("/help")) {

@@ -11,55 +11,38 @@ import java.io.BufferedReader;
 
 public class BotLogic {
    SimpleBot answeringBot = new SimpleBot();
-    public void writeMessageInFile(String message, String user_ID) {
+    public void writeMessageInFile(String message, String user_ID) throws IOException {
         String directory = System.getProperty("user.dir");
         String filePath = directory +"/" + user_ID + ".txt";
-            try {
-                File f = new File(filePath);
-            }
-            catch (Exception e) {
-                System.err.println(e);
-            }
-            File file = new File(filePath);
-            try {
+        File file = new File(filePath);
+
                 FileWriter writer = new FileWriter(filePath, true);
                 BufferedWriter bufferWriter = new BufferedWriter(writer);
                 bufferWriter.write(message + "\n");
                 bufferWriter.close();
-            } catch (IOException e) {
-                System.out.println(e);
-            }
+
     }
     public boolean isFileEmpty(File file) {
         return file.length() == 0;
     }
 
-    public String fileReader (File file) {
+    public String fileReader (File file) throws IOException {
         if (file.exists() && !isFileEmpty(file)) {
-            try {
                 FileReader fr = new FileReader(file);
                 BufferedReader reader = new BufferedReader(fr);
                 String answer = reader.readLine();
                 return answer;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return "";
     }
 
-    public String getReply(String message, String user_ID) {
+    public String getReply(String message, String user_ID) throws FileNotFoundException, IOException {
         String directory = System.getProperty("user.dir");
         String filePath = directory +"/" + user_ID + ".txt";
         if (message.equals("/start")) {
             String respond = "Привет, я Супа-дупа, а кто ты?";
-            try {
-                File f = new File(filePath);
-                f.createNewFile();
-            }
-            catch (Exception e) {
-                System.err.println(e);
-            }
+            File f = new File(filePath);
+            f.createNewFile();
             return respond;
         }
         File file = new File(filePath);
