@@ -3,7 +3,7 @@ import bot.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+//hello
 public class Main {
     public static String getMessage() {
         Scanner in = new Scanner(System.in);
