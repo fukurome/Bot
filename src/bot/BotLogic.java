@@ -48,7 +48,7 @@ public class BotLogic {
             writeMessageInFile(message, user_ID, directory);
             return "Приятно познакомиться, " + message;
         }
-        String[] answer = answeringBot.sayInReturn(message, user_ID);
+        String[] answer = answeringBot.sayInReturn(message, user_ID, directory);
         if (answer[1] == "anecdote")
             writeMessageInFile(answer[1], user_ID, directory);
         return answer[0];

@@ -196,8 +196,7 @@ public class SimpleBot {
         random = new Random();
     }
 
-    public int countWordsInChat(String answer, String user_ID) throws FileNotFoundException, IOException {
-        String directory = System.getProperty("user.dir");
+    public int countWordsInChat(String answer, String user_ID, String directory) throws FileNotFoundException, IOException {
         File file = new File(directory +"/" + user_ID + ".txt");
         int countWords = 0;
             FileReader fr = new FileReader(file);
@@ -210,7 +209,7 @@ public class SimpleBot {
             }
         return countWords;
     }
-    public String[] sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException {
+    public String[] sayInReturn(String message, String user_ID, String directory) throws FileNotFoundException, IOException {
         String answer= "";
         String key = "common";
         if (message.equals("/help")) {
@@ -227,7 +226,7 @@ public class SimpleBot {
             if (pattern.matcher(convertedMessage).find()) {
                 if (o.getValue().equals("anecdote"))
                 {
-                    int countAnecdotes = countWordsInChat("anecdote", user_ID);
+                    int countAnecdotes = countWordsInChat("anecdote", user_ID, directory);
                     if (countAnecdotes == JOKE.length) {
                         String[] reply = {"Я рассказал все анекдоты((", "jokes are over"};
                         return reply;
