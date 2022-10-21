@@ -3,13 +3,13 @@ import bot.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+<<<<<<< Updated upstream
 //hello
 //hi
+=======
+
+>>>>>>> Stashed changes
 public class Main {
-    public static String getMessage() {
-        Scanner in = new Scanner(System.in);
-        return in.nextLine();
-    }
     public static void main(String[] args) {
         try {
             BotLogic bot = new BotLogic();
@@ -19,14 +19,14 @@ public class Main {
             String filePath = directory +"/" + user_ID + ".txt";
             File file = new File(filePath);
             if(file.exists() && file.length() != 0) {
-                String name = bot.fileReader(file);
+                String name = bot.readingUserFile(user_ID, directory);
                 System.out.println("Рад тебя снова видеть, " + name + "!");
             }
             else
                 System.out.println("Если хотите начать общение, введите /start");
             while (true) {
-                String message = getMessage();
-                    String reply = bot.getReply(message, user_ID);
+                String message = in.nextLine();
+                    String reply = bot.getReply(message, user_ID, directory);
                     System.out.println(reply);
             }
         }

@@ -10,9 +10,8 @@ import java.io.BufferedReader;
 
 
 public class BotLogic {
-   SimpleBot answeringBot = new SimpleBot();
-    public void writeMessageInFile(String message, String user_ID) throws IOException {
-        String directory = System.getProperty("user.dir");
+    SimpleBot answeringBot = new SimpleBot();
+    public void writeMessageInFile(String message, String user_ID, String directory) throws IOException {
         String filePath = directory +"/" + user_ID + ".txt";
         File file = new File(filePath);
 
@@ -26,18 +25,17 @@ public class BotLogic {
         return file.length() == 0;
     }
 
-    public String fileReader (File file) throws IOException {
-        if (file.exists() && !isFileEmpty(file)) {
-                FileReader fr = new FileReader(file);
-                BufferedReader reader = new BufferedReader(fr);
-                String answer = reader.readLine();
+    public String readingUserFile (String user_ID, String directory) throws IOException {
+        String filePath = directory +"/" + user_ID + ".txt";
+        File file = new File(filePath);
+        FileReader fr = new FileReader(user_ID);
+        BufferedReader reader = new BufferedReader(fr);
+        String answer = reader.readLine();
                 return answer;
-        }
-        return "";
     }
 
-    public String getReply(String message, String user_ID) throws FileNotFoundException, IOException {
-        String directory = System.getProperty("user.dir");
+
+    public String getReply(String message, String user_ID, String directory) throws FileNotFoundException, IOException {
         String filePath = directory +"/" + user_ID + ".txt";
         if (message.equals("/start")) {
             String respond = "Привет, я Супа-дупа, а кто ты?";
@@ -47,12 +45,12 @@ public class BotLogic {
         }
         File file = new File(filePath);
         if(file.exists() && isFileEmpty(file)) {
-            writeMessageInFile(message, user_ID);
+            writeMessageInFile(message, user_ID, directory);
             return "Приятно познакомиться, " + message;
         }
         String[] answer = answeringBot.sayInReturn(message, user_ID);
         if (answer[1] == "anecdote")
-            writeMessageInFile(answer[1], user_ID);
+            writeMessageInFile(answer[1], user_ID, directory);
         return answer[0];
     }
 
