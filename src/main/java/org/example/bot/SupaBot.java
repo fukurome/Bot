@@ -6,13 +6,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.io.FileNotFoundException;
 
-
 public class SupaBot extends TelegramLongPollingBot {
-    String directory = System.getProperty("user.dir");
-
    @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
@@ -20,10 +16,19 @@ public class SupaBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
+            UserDataRepository repository = new UserDataRepository();
+            String directory = repository.getUserData(user_ID);
             BotLogic bot = new BotLogic();
             try {
-                String reply = bot.getReply(update.getMessage().getText(), user_ID, directory);
-                message.setText(reply);
+                Boolean sayHello = repository.isUserFileEmpty(user_ID);
+                String[] reply = bot.getReply(update.getMessage().getText(), user_ID, directory, sayHello);
+                if (reply[1].equals("new user"))
+                    repository.addUser(user_ID);
+                if (sayHello)
+                    repository.saveData(reply[1], user_ID, directory);
+                if (reply[1].equals("anecdote"))
+                    repository.saveData(reply[1], user_ID, directory);
+                message.setText(reply[0]);
             } catch (Exception e) {
                 System.err.println("Ой, я сломался");
             }
@@ -35,30 +40,6 @@ public class SupaBot extends TelegramLongPollingBot {
             }
         }
     }
-   public String getMessage(Update update) {
-        if(update.hasMessage() && update.getMessage().hasText()) {
-            //Извлекаем из объекта сообщение пользователя
-            String response = update.getMessage().getText();
-            //Достаем из inMess id чата пользователя
-            String chatId = update.getMessage().getChatId().toString();
-            //Получаем текст сообщения пользователя, отправляем в написанный нами обработчик
-            return response;
-        }
-        return "";
-    }
-    /*public void sendReply (String reply, String chatId) {
-        SendMessage outMess = new SendMessage();
-        //Добавляем в наше сообщение id чата, а также наш ответ
-        outMess.setChatId(chatId);
-        outMess.setText(reply);
-        //Отправка в чат
-        try {
-            execute(outMess);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     @Override
     public String getBotUsername() {
         return "pupa_supa_dupa_bot";
