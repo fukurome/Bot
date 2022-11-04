@@ -231,7 +231,7 @@ public class SimpleBot {
         put("bye", BYE);
         put("anecdote", JOKE);
         put("reaction", REACTION);
-        put("sad", SAD);
+        put("sad", SAD); //копируем в новый мап для статей (LINKS_BY_PATTERNS), здесь присваиваем новые массивы словесных ответов
         put("despair", DESPAIR);
         put("alone", ALONE);
         put("burnout", BURNOUT);
@@ -239,7 +239,7 @@ public class SimpleBot {
         put("anxiety", ANXIETY);
     }};
 
-    String[] FEELINGS = {
+    String[] FEELINGS = { //исчезнет
             "sad",
             "despair",
             "alone",
@@ -254,7 +254,7 @@ public class SimpleBot {
         random = new Random();
     }
 
-    public int countWordsInChat(String answer, String user_ID, String directory) throws IOException {
+    public int countWordsInChat(String answer, String user_ID, String directory) throws IOException { //работа с файлами только в репозитории
         File file = new File(directory +"/" + user_ID + ".txt");
         int countWords = 0;
         FileReader fr = new FileReader(file);
@@ -294,6 +294,7 @@ public class SimpleBot {
                     return reply;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
+                //стринг линк = LINKS_BY_PATTERNS.get(o.getValue())
                 String[] reply = {say[random.nextInt(say.length)], o.getValue()};
                 if (Arrays.stream(FEELINGS).anyMatch(x -> o.getValue().equals(x)))
                     reply[0] = "У меня для тебя есть статья на эту тему, почитай, это может помочь!\n" + reply[0];

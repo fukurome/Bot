@@ -17,11 +17,11 @@ public class SupaBot extends TelegramLongPollingBot {
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
             UserDataRepository repository = new UserDataRepository();
-            String directory = repository.getUserData(user_ID);
+            String directory = repository.getUserData(user_ID); //убрать обращение к директории
             BotLogic bot = new BotLogic();
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
-                String[] reply = bot.getReply(update.getMessage().getText(), user_ID, directory, sayHello);
+                String[] reply = bot.getReply(update.getMessage().getText(), user_ID, directory, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
                 if (reply[1].equals("new user"))
                     repository.addUser(user_ID);
                 if (sayHello)
