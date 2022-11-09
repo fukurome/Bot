@@ -87,7 +87,7 @@ public class SimpleBot {
         put("до\\s.*свидания", "bye");
     }};
 
-    final String[] SAD = {
+    final String[] SAD_LINKS = {
             "https://www.teatr-benefis.ru/staty/chto-delat-esli-grustno/",
             "https://www.shkolazhizni.ru/psychology/articles/53863/",
             "https://skrebeyko.ru/to_feel_better/",
@@ -95,25 +95,57 @@ public class SimpleBot {
             "https://lifehacker.ru/xochetsya-plakat/",
             "https://www.psychologies.ru/articles/pochemu-nam-hochetsya-plakat/"
 };
+    final String[] SAD = {
+            "После тёмной полосы всегда наступает белая. Держи полезную статью",
+            "Ты можешь грустить, это нормально, но вот статья, которая может помочь тебе",
+            "Грусть - как небольшая ложка дегтя в большой бочке меда, без нее нельзя прочувствовать полноценные эмоции счастья. Есть интересная статья на эту тему",
+            "Грусть может быть тёплой и приятной, полезной и необходимой. Вот полезная статья",
+            "Что случилось? Ты можешь обсудить это со мной. А так же есть полезная статья"
+    };
+    final String[] DESPAIR_LINKS = {
+            "https://theoryandpractice.ru/posts/16271-kogda-agoniya-srednego-vozrasta-pozadi-12-istin-pisatelnitsy-enn-lamott",
+            "https://www.psychologies.ru/articles/otchayanie-i-bessilie-est-li-vyihod/",
+            "https://www.shkolazhizni.ru/psychology/articles/103826/"
+    };
     final String[] DESPAIR = {
             "https://theoryandpractice.ru/posts/16271-kogda-agoniya-srednego-vozrasta-pozadi-12-istin-pisatelnitsy-enn-lamott",
             "https://www.psychologies.ru/articles/otchayanie-i-bessilie-est-li-vyihod/",
             "https://www.shkolazhizni.ru/psychology/articles/103826/"
+    };
+    final String[] ALONE_LINKS = {
+            "https://liter.kz/chuvstvuesh-sebya-odinoko/",
+            "https://rg.ru/2016/06/01/psihoterapevt-obiasnil-kak-preodolet-odinochestvo.html",
+            "https://www.teeviit.ee/ru/%d0%ba%d0%b0%d0%ba-%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b8%d1%82%d1%8c%d1%81%d1%8f-%d1%81-%d0%be%d0%b4%d0%b8%d0%bd%d0%be%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%be%d0%bc/"
     };
     final String[] ALONE = {
             "https://liter.kz/chuvstvuesh-sebya-odinoko/",
             "https://rg.ru/2016/06/01/psihoterapevt-obiasnil-kak-preodolet-odinochestvo.html",
             "https://www.teeviit.ee/ru/%d0%ba%d0%b0%d0%ba-%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b8%d1%82%d1%8c%d1%81%d1%8f-%d1%81-%d0%be%d0%b4%d0%b8%d0%bd%d0%be%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%be%d0%bc/"
     };
+    final String[] BURNOUT_LINKS = {
+            "https://habr.com/ru/company/oleg-bunin/blog/577316/",
+            "https://www.psychologies.ru/standpoint/kak-spravitsya-s-vyigoraniem-6-sovetov-psihologa/",
+            "https://rb.ru/opinion/4-soveta-psihologa/"
+    };
     final String[] BURNOUT = {
             "https://habr.com/ru/company/oleg-bunin/blog/577316/",
             "https://www.psychologies.ru/standpoint/kak-spravitsya-s-vyigoraniem-6-sovetov-psihologa/",
             "https://rb.ru/opinion/4-soveta-psihologa/"
     };
+    final String[] ANGER_LINKS = {
+            "https://natatnik.by/9-sovetov-kak-ne-zlitsya/",
+            "https://knife.media/im-not-angry-and-im-lying/",
+            "https://dszn.ru/press-center/news/6039"
+    };
     final String[] ANGER = {
             "https://natatnik.by/9-sovetov-kak-ne-zlitsya/",
             "https://knife.media/im-not-angry-and-im-lying/",
             "https://dszn.ru/press-center/news/6039"
+    };
+    final String[] ANXIETY_LINKS = {
+            "https://www.cleanipedia.com/ru/semya/kak-borotsya-s-trevozhnostyu.html",
+            "https://www.forbes.ru/forbeslife/456803-progonat-ee-bessmyslenno-kak-spravit-sa-s-trevogoj-daze-v-samoj-tazeloj-situacii",
+            "https://www.psychologies.ru/articles/10-sposobov-spravitsya-s-trevojnostyu/"
     };
     final String[] ANXIETY = {
             "https://www.cleanipedia.com/ru/semya/kak-borotsya-s-trevozhnostyu.html",
@@ -240,6 +272,15 @@ public class SimpleBot {
         put("anxiety", ANXIETY);
     }};
 
+    final Map<String, String[]> LINKS_BY_PATTERNS = new HashMap<String, String[]>() {{
+        put("sad", SAD_LINKS); //копируем в новый мап для статей (LINKS_BY_PATTERNS), здесь присваиваем новые массивы словесных ответов
+        put("despair", DESPAIR_LINKS);
+        put("alone", ALONE_LINKS);
+        put("burnout", BURNOUT_LINKS);
+        put("anger", ANGER_LINKS);
+        put("anxiety", ANXIETY_LINKS);
+    }};
+
     String[] FEELINGS = { //исчезнет
             "sad",
             "despair",
@@ -296,7 +337,7 @@ public class SimpleBot {
                     return reply;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
-                //стринг линк = LINKS_BY_PATTERNS.get(o.getValue())
+                String link[] = LINKS_BY_PATTERNS.get(o.getValue());
                 String[] reply = {say[random.nextInt(say.length)], o.getValue()};
                 if (Arrays.stream(FEELINGS).anyMatch(x -> o.getValue().equals(x)))
                     reply[0] = "У меня для тебя есть статья на эту тему, почитай, это может помочь!\n" + reply[0];
