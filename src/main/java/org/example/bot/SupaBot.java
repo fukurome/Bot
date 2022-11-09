@@ -6,6 +6,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import java.util.Properties;
 import java.io.FileNotFoundException;
 
 public class SupaBot extends TelegramLongPollingBot {
@@ -17,17 +18,16 @@ public class SupaBot extends TelegramLongPollingBot {
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
             UserDataRepository repository = new UserDataRepository();
-            String directory = repository.getUserData(user_ID); //убрать обращение к директории
             BotLogic bot = new BotLogic();
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
-                String[] reply = bot.getReply(update.getMessage().getText(), user_ID, directory, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
+                String[] reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
                 if (reply[1].equals("new user"))
                     repository.addUser(user_ID);
                 if (sayHello)
-                    repository.saveData(reply[1], user_ID, directory);
+                    repository.saveData(reply[1], user_ID);
                 if (reply[1].equals("anecdote"))
-                    repository.saveData(reply[1], user_ID, directory);
+                    repository.saveData(reply[1], user_ID);
                 message.setText(reply[0]);
             } catch (Exception e) {
                 System.err.println("Ой, я сломался");
@@ -49,5 +49,6 @@ public class SupaBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "5773339114:AAFm5a0YkPgb92sCwz34CHlr6CibF3TODgE";
     }
+
 }
 
