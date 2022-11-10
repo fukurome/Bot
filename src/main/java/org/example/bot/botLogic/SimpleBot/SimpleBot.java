@@ -108,9 +108,10 @@ public class SimpleBot {
             "https://www.shkolazhizni.ru/psychology/articles/103826/"
     };
     final String[] DESPAIR = {
-            "https://theoryandpractice.ru/posts/16271-kogda-agoniya-srednego-vozrasta-pozadi-12-istin-pisatelnitsy-enn-lamott",
-            "https://www.psychologies.ru/articles/otchayanie-i-bessilie-est-li-vyihod/",
-            "https://www.shkolazhizni.ru/psychology/articles/103826/"
+            "Как бы тебе сейчас не было плохо, такое состояние не будет длиться вечно. У меня есть статья на эту тему",
+            "Мне очень жаль, что я не могу тебя обнять :( У меня есть статья, может, она сможет немного помочь тебе",
+            "Всегда помни, что ты не одинок, у тебя есть поддержка. Можешь посмотреть статью на эту тему",
+            "Это банально, но стоит всегда верить в лучшее. Можешь почитать статью про это"
     };
     final String[] ALONE_LINKS = {
             "https://liter.kz/chuvstvuesh-sebya-odinoko/",
@@ -118,9 +119,11 @@ public class SimpleBot {
             "https://www.teeviit.ee/ru/%d0%ba%d0%b0%d0%ba-%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b8%d1%82%d1%8c%d1%81%d1%8f-%d1%81-%d0%be%d0%b4%d0%b8%d0%bd%d0%be%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%be%d0%bc/"
     };
     final String[] ALONE = {
-            "https://liter.kz/chuvstvuesh-sebya-odinoko/",
-            "https://rg.ru/2016/06/01/psihoterapevt-obiasnil-kak-preodolet-odinochestvo.html",
-            "https://www.teeviit.ee/ru/%d0%ba%d0%b0%d0%ba-%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b8%d1%82%d1%8c%d1%81%d1%8f-%d1%81-%d0%be%d0%b4%d0%b8%d0%bd%d0%be%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%be%d0%bc/"
+            "У тебя всегда есть я, можешь писать мне, если тебе одиноко <3 Также у меня есть статья на эту тему",
+            "Когда я чувствую себя одиноко, я разговариваю со своей кошкой, это помогает мне отвлечься. Можешь прочесть статью на тему одиночества",
+            "Даже если кажется, что вокруг тебя никого не осталось, помни, что в одиночестве тоже есть свои плюсы. Прочитай данную статью, если хочешь",
+            "Помни, что интернет-друзья тоже друзья. И ими всегда можно легко обзавестись :) У меня есть полезная статья на эту тему",
+            "Я не могу обнять тебя или поддержать, не зная всей ситуации твоей жизни, но могу посоветовать тебе статью",
     };
     final String[] BURNOUT_LINKS = {
             "https://habr.com/ru/company/oleg-bunin/blog/577316/",
@@ -128,9 +131,10 @@ public class SimpleBot {
             "https://rb.ru/opinion/4-soveta-psihologa/"
     };
     final String[] BURNOUT = {
-            "https://habr.com/ru/company/oleg-bunin/blog/577316/",
-            "https://www.psychologies.ru/standpoint/kak-spravitsya-s-vyigoraniem-6-sovetov-psihologa/",
-            "https://rb.ru/opinion/4-soveta-psihologa/"
+            "Это рано или поздно случается с каждым, есть много статей про то, как можно справиться с этим, держи одну из таких",
+            "Наверное, лучший способ справиться с этим - отвлечься на время. Вот статья про это",
+            "Хобби, как ни странно, хорошо помогают с этим справиться. Также у меня есть статья об этом",
+            "Я верю в то, что ты сильный и сможешь справиться с этим. Держи полезную статью об этом"
     };
     final String[] ANGER_LINKS = {
             "https://natatnik.by/9-sovetov-kak-ne-zlitsya/",
@@ -138,9 +142,9 @@ public class SimpleBot {
             "https://dszn.ru/press-center/news/6039"
     };
     final String[] ANGER = {
-            "https://natatnik.by/9-sovetov-kak-ne-zlitsya/",
-            "https://knife.media/im-not-angry-and-im-lying/",
-            "https://dszn.ru/press-center/news/6039"
+            "Я очень часто злюсь, мне помогает перебивание этой эмоции другими эмоциями, положительными. У меня есть про это статья",
+            "Иногда бывает полезно выпустить пар, можно даже отлупить подушку. Прочитай статью на эту тему, если захочешь",
+            "Подумай, чем именно вызвана агрессия, и постарайся разобраться с первопричиной. У меня есть хорошая статья на эту тему"
     };
     final String[] ANXIETY_LINKS = {
             "https://www.cleanipedia.com/ru/semya/kak-borotsya-s-trevozhnostyu.html",
@@ -148,9 +152,10 @@ public class SimpleBot {
             "https://www.psychologies.ru/articles/10-sposobov-spravitsya-s-trevojnostyu/"
     };
     final String[] ANXIETY = {
-            "https://www.cleanipedia.com/ru/semya/kak-borotsya-s-trevozhnostyu.html",
-            "https://www.forbes.ru/forbeslife/456803-progonat-ee-bessmyslenno-kak-spravit-sa-s-trevogoj-daze-v-samoj-tazeloj-situacii",
-            "https://www.psychologies.ru/articles/10-sposobov-spravitsya-s-trevojnostyu/"
+            "Если чувствуешь беспричинную тревогу - свяжись со своими близкими, общение - лучший способ отвлечься. Можешь прочесть статью о том, как справиться с тревогой",
+            "Стоит постараться занять себя чем нибудь, мне помогает интеллектуальная деятельность или хобби. Также у меня есть статья об этом",
+            "Хуже всего - закрывать на эту ситуацию глаза. Попробуй понять, вдруг все же есть причины волноваться? Тем не менее, прочитай статью о том, как можно справиться с этим",
+            "Можешь занять себя разговором со мной, или как я, разговорами с кошкой. Но лучше всего - прочти статью о том, как с этим бороться"
     };
     final String[] HELLO = {
             "Привет!",
@@ -160,7 +165,7 @@ public class SimpleBot {
             "Вас там тентакли занесли ко мне?",
             "Как приятно тебя читать!",
             "Дарова",
-            "Купи слона",
+            "Доброе утро, милашка",
             "Превед, медвед, йа - креведко",
             "Ну, привет"};
     final String[] HOWAREYOU = {
