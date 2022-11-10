@@ -1,8 +1,12 @@
 package org.example.bot.botLogic.SimpleBot;
 
 import java.io.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.regex.Pattern;
+import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
 
 public class SimpleBot {
     final String[] COMMON_PHRASES = {
@@ -316,13 +320,15 @@ public class SimpleBot {
         reader.close();
         return countWords;
     }
-    public String[] sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException {
+    public ResponseToUserAndEventType sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException {
         String answer= "";
         String key = "common";
+        ResponseToUserAndEventType r = new ResponseToUserAndEventType();
         if (message.equals("/help")) {
-            String[] respond = {"Привет! Я бот Супа-Дупа. Мы можем с тобой поговорить о чём-нибудь, " +
-                    "или я могу рассказать тебе анекдот.", "settings"};
-            return respond;
+            r.response = "Привет! Я бот Супа-Дупа. Мы можем с тобой поговорить о чём-нибудь, " +
+                    "или я могу рассказать тебе анекдот.";
+            r.event = "settings";
+            return r;
         }
         if (message.trim().endsWith("?"))
             answer = ELUSIVE_ANSWERS[random.nextInt(ELUSIVE_ANSWERS.length)];
@@ -335,22 +341,31 @@ public class SimpleBot {
                 {
                     int countAnecdotes = countWordsInChat("anecdote", user_ID);
                     if (countAnecdotes == JOKE.length) {
-                        String[] reply = {"Я рассказал все анекдоты((", "jokes are over"};
-                        return reply;
+                        r.response = "Я рассказал все анекдоты((";
+                        r.event = "jokes are over";
+                        return r;
                     }
-                    String[] reply = {JOKE[countAnecdotes], "anecdote"};
-                    return reply;
+                    r.response = JOKE[countAnecdotes];
+                    r.event = "anecdote";
+                    return r;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
                 String link[] = LINKS_BY_PATTERNS.get(o.getValue());
+                if (link.length == 0) {
+                    r.response = say[random.nextInt(say.length)];
+                } else {
+                    r.response = say[random.nextInt(say.length)] + link[random.nextInt(say.length)];
+                }
+                r.event = o.getValue();
                 String[] reply = {say[random.nextInt(say.length)], o.getValue()};
                 if (Arrays.stream(FEELINGS).anyMatch(x -> o.getValue().equals(x)))
                     reply[0] = "У меня для тебя есть статья на эту тему, почитай, это может помочь!\n" + reply[0];
-                return reply;
+                return r;
 
             }
         }
-        String[] respond = {answer, key};
-        return respond;
+        r.response = answer;
+        r.event = key;
+        return r;
     }
 }
