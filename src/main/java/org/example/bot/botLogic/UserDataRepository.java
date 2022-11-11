@@ -9,6 +9,7 @@ public class UserDataRepository {
     }
     public void saveData(String message, String user_ID) throws IOException {
         String filePath = directory + "/" + user_ID + ".txt";
+        File file = new File(filePath);
         FileWriter writer = new FileWriter(filePath, true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         try {
@@ -16,19 +17,24 @@ public class UserDataRepository {
         } finally {
             bufferWriter.close();
         }
+
     }
     public int countWordsInChat(String answer, String user_ID) throws IOException { //работа с файлами только в репозитории
+        String directory = getUserData(user_ID);
         File file = new File(directory +"/" + user_ID + ".txt");
         int countWords = 0;
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
-        String line = reader.readLine();
-        while (line != null) {
-            if (line.equals(answer))
-                countWords++;
-            line = reader.readLine();
+        try {
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.equals(answer))
+                    countWords++;
+                line = reader.readLine();
+            }
+        } finally {
+            reader.close();
         }
-        reader.close();
         return countWords;
     }
     public void addUser(String user_ID) throws IOException {

@@ -6,8 +6,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.util.Properties;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
 
 public class SupaBot extends TelegramLongPollingBot {
@@ -48,8 +48,22 @@ public class SupaBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "5773339114:AAFm5a0YkPgb92sCwz34CHlr6CibF3TODgE";
-    }
+        File file = new File("C:\\Users\\Irina Shingalova\\Desktop\\token.txt");
+        FileReader fr = null;
+        try {
+            fr = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        BufferedReader reader = new BufferedReader(fr);
+        String line = null;
+        try {
+            line = reader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return line;
+   }
 
 }
 
