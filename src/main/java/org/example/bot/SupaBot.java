@@ -23,12 +23,12 @@ public class SupaBot extends TelegramLongPollingBot {
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
                 ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
-                if (reply.event.equals("new user"))
+                if ((reply.event).equals("new user"))
                     repository.addUser(user_ID);
                 if (sayHello)
-                    repository.saveData(reply.event, user_ID);
-                if (reply.event.equals("anecdote"))
-                    repository.saveData(reply.event, user_ID);
+                    repository.saveData((reply.event), user_ID);
+                if ((reply.event).equals("anecdote"))
+                    repository.saveData((reply.event), user_ID);
                 message.setText(reply.response);
             } catch (Exception e) {
                 System.err.println("Ой, я сломался");

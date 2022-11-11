@@ -1,12 +1,12 @@
 package org.example.bot.botLogic.SimpleBot;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
+import org.example.bot.botLogic.UserDataRepository;
 
 public class SimpleBot {
     final String[] COMMON_PHRASES = {
@@ -31,6 +31,20 @@ public class SimpleBot {
             "Зачем тебе такая информация?",
             "Давай сохраним интригу?"};
 
+    final Map<String, String> PATTERNS_FOR_LINKS = new HashMap<String, String>() {{
+            put("груст", "sad");
+            put("уныл", "sad");
+            put("плак", "sad");
+            put("плохо", "sad");
+            put("одинок", "alone");
+            put("одиночеств", "alone");
+            put("трево", "anxiety");
+            put("злюсь", "anger");
+            put("злость", "anger");
+            put("выгорани", "burnout");
+            put("выгорел", "burnout");
+            put("отчаян", "despair");
+    }};
     final Map<String, String> PATTERNS_FOR_ANALYSIS = new HashMap<String, String>() {{
         put("груст", "sad");
         put("уныл", "sad");
@@ -290,40 +304,18 @@ public class SimpleBot {
         put("anxiety", ANXIETY_LINKS);
     }};
 
-    String[] FEELINGS = { //исчезнет
-            "sad",
-            "despair",
-            "alone",
-            "burnout",
-            "anger",
-            "anxiety"
-    };
     Pattern pattern; // for regexp
     Random random; // for random answers
 
     public SimpleBot() {
         random = new Random();
     }
-    String directory = System.getProperty("user.dir");
 
-    public int countWordsInChat(String answer, String user_ID) throws IOException { //работа с файлами только в репозитории
-        File file = new File(directory +"/" + user_ID + ".txt");
-        int countWords = 0;
-        FileReader fr = new FileReader(file);
-        BufferedReader reader = new BufferedReader(fr);
-        String line = reader.readLine();
-        while (line != null) {
-            if (line.equals(answer))
-                countWords++;
-            line = reader.readLine();
-        }
-        reader.close();
-        return countWords;
-    }
     public ResponseToUserAndEventType sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException {
         String answer= "";
         String key = "common";
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
+        UserDataRepository repository = new UserDataRepository();
         if (message.equals("/help")) {
             r.response = "Привет! Я бот Супа-Дупа. Мы можем с тобой поговорить о чём-нибудь, " +
                     "или я могу рассказать тебе анекдот.";
@@ -339,7 +331,7 @@ public class SimpleBot {
             if (pattern.matcher(convertedMessage).find()) {
                 if (o.getValue().equals("anecdote"))
                 {
-                    int countAnecdotes = countWordsInChat("anecdote", user_ID);
+                    int countAnecdotes = repository.countWordsInChat("anecdote", user_ID);
                     if (countAnecdotes == JOKE.length) {
                         r.response = "Я рассказал все анекдоты((";
                         r.event = "jokes are over";
@@ -350,16 +342,15 @@ public class SimpleBot {
                     return r;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
-                String link[] = LINKS_BY_PATTERNS.get(o.getValue());
-                if (link.length == 0) {
-                    r.response = say[random.nextInt(say.length)];
-                } else {
-                    r.response = say[random.nextInt(say.length)] + link[random.nextInt(say.length)];
-                }
+                r.response = say[random.nextInt(say.length)];
                 r.event = o.getValue();
-                String[] reply = {say[random.nextInt(say.length)], o.getValue()};
-                if (Arrays.stream(FEELINGS).anyMatch(x -> o.getValue().equals(x)))
-                    reply[0] = "У меня для тебя есть статья на эту тему, почитай, это может помочь!\n" + reply[0];
+                for (Map.Entry<String, String> link: PATTERNS_FOR_LINKS.entrySet()) {
+                    Pattern linkPattern = Pattern.compile(link.getKey());
+                    if (linkPattern.matcher(convertedMessage).find()) {
+                        String links[] = LINKS_BY_PATTERNS.get(link.getValue());
+                        r.response = say[random.nextInt(say.length)] + links[random.nextInt(links.length)];
+                    }
+                }
                 return r;
 
             }

@@ -8,24 +8,28 @@ public class UserDataRepository {
         return directory;
     }
     public void saveData(String message, String user_ID) throws IOException {
-        /*String filePath = directory + "/" + user_ID + ".txt";
-        File file = new File(filePath);
-        FileWriter writer = new FileWriter(filePath, true);
-        BufferedWriter bufferWriter = new BufferedWriter(writer);
-        bufferWriter.write(message + "\n");
-        bufferWriter.close();*/
         String filePath = directory + "/" + user_ID + ".txt";
-        File file = new File(filePath);
         FileWriter writer = new FileWriter(filePath, true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         try {
             bufferWriter.write(message + "\n");
-        } catch (Exception e) {
-            System.err.println("Ой, я сломался");
         } finally {
             bufferWriter.close();
         }
-
+    }
+    public int countWordsInChat(String answer, String user_ID) throws IOException { //работа с файлами только в репозитории
+        File file = new File(directory +"/" + user_ID + ".txt");
+        int countWords = 0;
+        FileReader fr = new FileReader(file);
+        BufferedReader reader = new BufferedReader(fr);
+        String line = reader.readLine();
+        while (line != null) {
+            if (line.equals(answer))
+                countWords++;
+            line = reader.readLine();
+        }
+        reader.close();
+        return countWords;
     }
     public void addUser(String user_ID) throws IOException {
         String filePath = directory +"/" + user_ID + ".txt";

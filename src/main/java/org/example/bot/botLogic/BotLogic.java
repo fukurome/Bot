@@ -22,7 +22,6 @@ public class BotLogic {
             return r;
         }
         if(fileIsEmpty) {
-            String[] respond = {"Приятно познакомиться, " + message, message};
             r.response = "Приятно познакомиться, " + message;
             r.event = message;
             return r;
