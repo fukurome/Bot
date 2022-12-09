@@ -1,6 +1,7 @@
 package org.example.bot.botLogic.SimpleBot;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -61,6 +62,8 @@ public class SimpleBot {
         //anecdote
         put("анекдот", "anecdote");
         put("шутк", "anecdote");
+        put("мюллер", "anecdotem");
+        put("штирлиц", "anecdotesh");
         //reaction
         put("смешно", "reaction");
         put("несмешно", "reaction");
@@ -243,7 +246,28 @@ public class SimpleBot {
             "Как давно это началось? Расскажи чуть подробнее.",
             "А какого это?"
     };
-
+    final Map<String, String> JOKE2 = new HashMap<String, String>() {{
+        put("— Я худею.\n— Давно?\n— Почти полчаса.\n— Заметно уже.\n— Правда?\n— Ага. Глаза голодные.", "anecdote1");
+        put("Штирлиц сидел у окна. Из окна дуло. Штирлиц прикрыл форточку и дуло исчезло.", "anecdote2");
+        put("В дверь постучали 9 раз.\n- Не угадаешь! - подумал Мюллер с осьминогом в руке.\nДома никого не было.", "anecdote3");
+        put("Штирлиц долго смотрел в одну точку. Потом в другую. Двоеточие - наконец-то догадался Штирлиц.", "anecdote4");
+        put("Гиммлер вызывает своего сотрудника.\n" +
+                    "- Назовите двузначное число.\n" +
+                    "- 45.\n" +
+                    "- А почему не 54?\n" +
+                    "- потому что 45!\n" +
+                    "Гиммлер пишет характеристику \"характер нордический\" и вызывает следующего.\n" +
+                    "- Назовите двузначное число.\n" +
+                    "- 28.\n" +
+                    "- А почему не 82?\n" +
+                    "- Можно, конечно, и 82, но лучше 28.\n" +
+                    "Гиммлер пишет характеристику \"характер близок к нордическому\" и вызывает следующего.\n" +
+                    "- Назовите двузначное число.\n" +
+                    "- 33.\n" +
+                    "- А почему не... А, это Вы, Штирлиц.", "anecdote5");
+        put("Прогуливаясь по лесу, Штирлиц заглянул в дупло. На него смотрели чьи-то глаза.\n" +
+                    "- Дятел, - подумал Штирлиц.\n- Сам ты дятел, - подумал Мюллер.", "anecdote6");
+    }};
     final String[] JOKE = {
             "— Я худею.\n— Давно?\n— Почти полчаса.\n— Заметно уже.\n— Правда?\n— Ага. Глаза голодные.",
             "Штирлиц сидел у окна. Из окна дуло. Штирлиц прикрыл форточку и дуло исчезло.",
@@ -331,14 +355,9 @@ public class SimpleBot {
             if (pattern.matcher(convertedMessage).find()) {
                 if (o.getValue().equals("anecdote"))
                 {
-                    int countAnecdotes = repository.countWordsInChat("anecdote", user_ID);
-                    if (countAnecdotes == JOKE.length) {
-                        r.response = "Я рассказал все анекдоты((";
-                        r.event = "jokes are over";
-                        return r;
-                    }
-                    r.response = JOKE[countAnecdotes];
-                    r.event = "anecdote";
+                    String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
+                    r.response = say[random.nextInt(say.length)];
+                    r.event = JOKE2.get(r.response);
                     return r;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());

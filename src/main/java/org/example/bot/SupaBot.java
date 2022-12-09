@@ -27,7 +27,7 @@ public class SupaBot extends TelegramLongPollingBot {
                     repository.addUser(user_ID);
                 if (sayHello)
                     repository.saveData((reply.event), user_ID);
-                if ((reply.event).equals("anecdote"))
+                if ((reply.event).contains("anecdote"))
                     repository.saveData((reply.event), user_ID);
                 message.setText(reply.response);
             } catch (Exception e) {

@@ -2,6 +2,7 @@ package org.example.bot.botLogic;
 
 import java.io.*;
 
+
 public class UserDataRepository {
     String directory = System.getProperty("user.dir");
     public String getUserData(String user_ID) {
@@ -19,23 +20,22 @@ public class UserDataRepository {
         }
 
     }
-    public int countWordsInChat(String answer, String user_ID) throws IOException { //работа с файлами только в репозитории
+    public boolean presenceOfAnAnecdote(String user_ID, String word) throws IOException { //работа с файлами только в репозитории
         String directory = getUserData(user_ID);
         File file = new File(directory +"/" + user_ID + ".txt");
-        int countWords = 0;
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
+        String line = "";
+        boolean exam = true;
         try {
-            String line = reader.readLine();
-            while (line != null) {
-                if (line.equals(answer))
-                    countWords++;
-                line = reader.readLine();
+            line = reader.readLine();
+            if (word == line) {
+                exam = false;
             }
         } finally {
             reader.close();
         }
-        return countWords;
+        return exam;
     }
     public void addUser(String user_ID) throws IOException {
         String filePath = directory +"/" + user_ID + ".txt";
