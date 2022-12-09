@@ -356,8 +356,19 @@ public class SimpleBot {
                 if (o.getValue().equals("anecdote"))
                 {
                     String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
-                    r.response = say[random.nextInt(say.length)];
-                    r.event = JOKE2.get(r.response);
+                    while (true) {
+                        if (repository.getLineCountByReader(user_ID) == false) {
+                            r.response = "Я рассказал все анекдоты :(";
+                            r.event = "anecdote";
+                            break;
+                        }
+                        r.response = say[random.nextInt(say.length)];
+                        String word = r.response;
+                        if (repository.presenceOfAnAnecdote(user_ID, word)) {
+                            r.event = JOKE2.get(r.response);
+                            break;
+                        }
+                    }
                     return r;
                 }
                 String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());

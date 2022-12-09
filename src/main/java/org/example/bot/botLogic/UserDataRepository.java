@@ -26,17 +26,38 @@ public class UserDataRepository {
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
         String line = "";
-        boolean exam = true;
         try {
-            line = reader.readLine();
-            if (word == line) {
-                exam = false;
+            while (reader.readLine() != null) {
+                line = reader.readLine();
+                if (word == line) {
+                    return false;
+                }
+            }
+        } finally {
+            reader.close();
+        return true;
+    }
+        
+    public boolean getLineCountByReader(String user_ID) throws IOException {
+        String directory = getUserData(user_ID);
+        File file = new File(directory +"/" + user_ID + ".txt");
+        FileReader fr = new FileReader(file);
+        BufferedReader reader = new BufferedReader(fr);
+        String line = "";
+        int count = 0;
+        try {
+            while (reader.readLine() != null) {
+                count += 1;
             }
         } finally {
             reader.close();
         }
-        return exam;
+        if (count >= 7) {
+            return false;
+        }
+        return true;
     }
+
     public void addUser(String user_ID) throws IOException {
         String filePath = directory +"/" + user_ID + ".txt";
         File f = new File(filePath);
