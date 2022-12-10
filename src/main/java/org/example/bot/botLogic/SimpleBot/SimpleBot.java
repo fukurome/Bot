@@ -141,6 +141,7 @@ public class SimpleBot {
                 sheet.WriteFormula(formula, "B1");
                 String patternColumn = sheet.GetColumn("B1");
                 String say[] = sheet.ReadSheet(patternColumn + ":" + patternColumn);
+                System.out.println(say);
                 r.response = say[random.nextInt(say.length)];
                 r.event = o.getValue();
                 for (Map.Entry<String, String> link: PATTERNS_FOR_LINKS.entrySet()) {

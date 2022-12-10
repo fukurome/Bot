@@ -24,7 +24,7 @@ import java.util.List;
 
 public class GoogleSheets {
         private static Sheets sheetsService;
-        private static String APPLICATION_NAME = "Test Sheets";
+        private static String APPLICATION_NAME = "Google Sheets fot TG-bot";
         private static String SPREADSHEETS_ID = "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw";
 
         private Credential authorize() throws IOException, GeneralSecurityException {
