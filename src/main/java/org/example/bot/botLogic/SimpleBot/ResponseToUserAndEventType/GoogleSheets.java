@@ -70,6 +70,7 @@ public class GoogleSheets {
             //запись формулы в табличку
         public void WriteFormula(String formula, String cell) throws IOException, GeneralSecurityException {
             //String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
+            sheetsService = getSheetsService();
             ValueRange body = new ValueRange()
                 .setValues(Arrays.asList(
                         Arrays.asList(formula)
@@ -83,7 +84,7 @@ public class GoogleSheets {
 
         public String[] ReadSheet(String range) throws IOException, GeneralSecurityException {
             //String range = "A:A";
-
+            sheetsService = getSheetsService();
             ValueRange response = sheetsService.spreadsheets().values()
                     .get(SPREADSHEETS_ID, range)
                     .execute();
