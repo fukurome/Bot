@@ -14,7 +14,7 @@ import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToU
 
 public class SupaBot extends TelegramLongPollingBot {
    @Override
-    public void onUpdateReceived(Update update) throws IOException, GeneralSecurityException, TelegramApiException {
+    public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
@@ -22,7 +22,7 @@ public class SupaBot extends TelegramLongPollingBot {
             String user_ID = update.getMessage().getChatId().toString();
             UserDataRepository repository = new UserDataRepository();
             BotLogic bot = new BotLogic();
-
+            try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
                 ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
                 if ((reply.event).equals("new user"))
@@ -34,6 +34,11 @@ public class SupaBot extends TelegramLongPollingBot {
                 message.setText(reply.response);
 
                 execute(message); // Call method to send the message
+            }
+            catch (Exception e) {
+                System.err.println("Error");
+            }
+
 
         }
     }
