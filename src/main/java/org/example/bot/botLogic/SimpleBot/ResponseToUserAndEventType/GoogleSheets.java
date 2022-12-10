@@ -55,29 +55,53 @@ public class GoogleSheets {
                     .build();
         }
 
-        public String GetNumberOfColumn() throws IOException, GeneralSecurityException {
+        public String GetColumn(String range) throws IOException, GeneralSecurityException {
             sheetsService = getSheetsService();
-            String range = "B16";
+            //String range = "B16";
 
             Sheets.Spreadsheets.Values.Get request = sheetsService.spreadsheets().values()
                     .get(SPREADSHEETS_ID, range).setValueRenderOption("UNFORMATTED_VALUE");
 
             ValueRange response = request.execute();
-            String numberOfColumn = response.getValues().get(0).get(0).toString();
-            return numberOfColumn;
+            String column = response.getValues().get(0).get(0).toString();
+            return column;
         }
 
             //запись формулы в табличку
-        public void WriteFormula(String pattern) throws IOException, GeneralSecurityException {
-            String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
-        ValueRange body = new ValueRange()
+        public void WriteFormula(String formula, String cell) throws IOException, GeneralSecurityException {
+            //String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
+            ValueRange body = new ValueRange()
                 .setValues(Arrays.asList(
                         Arrays.asList(formula)
                 ));
 
         UpdateValuesResponse result = sheetsService.spreadsheets().values()
-                .update(SPREADSHEETS_ID, "A1", body)
+                .update(SPREADSHEETS_ID, cell, body)
                 .setValueInputOption("USER_ENTERED")
                 .execute();
         }
+
+        public String[] ReadSheet(String range) throws IOException, GeneralSecurityException {
+            //String range = "A:A";
+
+            ValueRange response = sheetsService.spreadsheets().values()
+                    .get(SPREADSHEETS_ID, range)
+                    .execute();
+
+            List<List<Object>> values = response.getValues();
+            int n = values.size();
+            String[] answer = new String[n];
+            if (values == null || values.isEmpty()) {
+                System.out.println("No data found.");
+            } else {
+                int i = 0;
+                for (List row : values) {
+                    answer[i] = row.get(0).toString();
+                    i++;
+                    System.out.println(answer[i]);
+                }
+            }
+            return answer;
+        }
+
 }
