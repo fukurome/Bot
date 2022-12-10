@@ -48,7 +48,7 @@ public class SupaBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        File file = new File("C:\\Users\\Irina Shingalova\\Desktop\\token.txt");
+        File file = new File("C:\\Users\\dns\\IdeaProjects\\token.txt");
         FileReader fr = null;
         try {
             fr = new FileReader(file);

@@ -6,7 +6,8 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -16,6 +17,13 @@ dependencies {
     implementation 'org.telegram:telegrambots:6.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.google.api-client:google-api-client:1.32.1'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
+
+    implementation group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.22.0'
 }
 
 tasks.named('test') {
