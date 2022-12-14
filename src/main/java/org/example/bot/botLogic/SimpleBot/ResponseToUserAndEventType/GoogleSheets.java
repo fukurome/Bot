@@ -99,7 +99,6 @@ public class GoogleSheets {
                 for (List row : values) {
                     answer[i] = row.get(0).toString();
                     i++;
-                    System.out.println(answer[i]);
                 }
             }
             return answer;
