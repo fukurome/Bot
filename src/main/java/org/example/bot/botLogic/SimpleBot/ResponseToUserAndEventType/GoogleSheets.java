@@ -52,33 +52,6 @@ public class GoogleSheets {
                     .build();
         }
 
-        public String getColumn(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
-            sheetsService = getSheetsService(APPLICATION_NAME);
-            //String range = "B16";
-
-            Sheets.Spreadsheets.Values.Get request = sheetsService.spreadsheets().values()
-                    .get(SPREADSHEETS_ID, range).setValueRenderOption("UNFORMATTED_VALUE");
-
-            ValueRange response = request.execute();
-            String column = response.getValues().get(0).get(0).toString();
-            return column;
-        }
-
-            //запись формулы в табличку
-        public void writeFormula(String formula, String cell, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
-            //String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
-            sheetsService = getSheetsService(APPLICATION_NAME);
-            ValueRange body = new ValueRange()
-                .setValues(Arrays.asList(
-                        Arrays.asList(formula)
-                ));
-
-        UpdateValuesResponse result = sheetsService.spreadsheets().values()
-                .update(SPREADSHEETS_ID, cell, body)
-                .setValueInputOption("USER_ENTERED")
-                .execute();
-        }
-
         public String[] readSheetCol(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
             sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange response = sheetsService.spreadsheets().values()
