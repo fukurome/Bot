@@ -2,13 +2,14 @@ package org.example.bot.botLogic.SimpleBot;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
+
+import com.google.common.collect.Iterators;
 import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.*;
 import org.example.bot.botLogic.UserDataRepository;
+import org.glassfish.grizzly.utils.ArrayUtils;
+
 
 public class SimpleBot {
 
@@ -331,7 +332,16 @@ public class SimpleBot {
     public SimpleBot() {
         random = new Random();
     }
-    public ResponseToUserAndEventType sayInReturn(String message, String user_ID, String APPLICATION_NAME, String SPREADSHEETS_ID) throws FileNotFoundException, IOException {
+
+    public static<String> int find(String[] arr, String target) {
+        //return Iterators.indexOf(Iterators.forArray(arr), x -> x.equals(target));
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i].equals(target))
+                return i + 1;
+        }
+        return -1;
+    }
+    public ResponseToUserAndEventType sayInReturn(String message, String user_ID, String APPLICATION_NAME, String SPREADSHEETS_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
         String answer= "";
         String key = "common";
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
@@ -346,12 +356,12 @@ public class SimpleBot {
             answer = ELUSIVE_ANSWERS[random.nextInt(ELUSIVE_ANSWERS.length)];
         else answer = COMMON_PHRASES[random.nextInt(COMMON_PHRASES.length)];
         String convertedMessage = String.join(" ", message.toLowerCase().split("[ {,|.}?]+"));
-        for (Map.Entry<String, String> o : PATTERNS_FOR_ANALYSIS.entrySet()) {
-            pattern = Pattern.compile(o.getKey());
+        for (Map.Entry<String, String> map : PATTERNS_FOR_ANALYSIS.entrySet()) {
+            pattern = Pattern.compile(map.getKey());
             if (pattern.matcher(convertedMessage).find()) {
-                if (o.getValue().equals("anecdote"))
+                if (map.getValue().equals("anecdote"))
                 {
-                    String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
+                    String say[] = ANSWERS_BY_PATTERNS.get(map.getValue());
                     while (true) {
                         if (repository.getLineCountByReader(user_ID) == false) {
                             r.response = "Я рассказал все анекдоты :(";
@@ -365,16 +375,22 @@ public class SimpleBot {
                         }
                     }
                 }
-                String say[] = ANSWERS_BY_PATTERNS.get(o.getValue());
-                r.response = say[random.nextInt(say.length)];
-                r.event = o.getValue();
-                for (Map.Entry<String, String> link: PATTERNS_FOR_LINKS.entrySet()) {
+                GoogleSheets googleSheets = new GoogleSheets();
+                String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", APPLICATION_NAME, SPREADSHEETS_ID);
+                int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
+                String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern +":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+                //String say[] = ANSWERS_BY_PATTERNS.get(map.getValue());
+                r.response = answers[random.nextInt(answers.length)];
+                r.event = map.getValue();
+                /*for (Map.Entry<String, String> link: PATTERNS_FOR_LINKS.entrySet()) {
                     Pattern linkPattern = Pattern.compile(link.getKey());
                     if (linkPattern.matcher(convertedMessage).find()) {
-                        String links[] = LINKS_BY_PATTERNS.get(link.getValue());
-                        r.response = say[random.nextInt(say.length)] + links[random.nextInt(links.length)];
+                        colOfPattern = find(patternsOfAnswers, link.getValue().toUpperCase());
+                        answers = googleSheets.readSheet("R2C" + colOfPattern +"R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+                        //String links[] = LINKS_BY_PATTERNS.get(link.getValue());
+                        r.response += answers[random.nextInt(answers.length)];
                     }
-                }
+                }*/
                 return r;
             }
         }

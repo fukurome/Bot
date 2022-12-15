@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.GoogleSheetsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-12-15T15:56:07" hostname="LAPTOP-4R58P7VE" time="2.029">
-  <properties/>
-  <testcase name="readSheetTest()" classname="org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.GoogleSheetsTest" time="1.239"/>
-  <testcase name="writeFormula()" classname="org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.GoogleSheetsTest" time="0.789"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -52,7 +52,7 @@ public class GoogleSheets {
                     .build();
         }
 
-        public String GetColumn(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
+        public String getColumn(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
             sheetsService = getSheetsService(APPLICATION_NAME);
             //String range = "B16";
 
@@ -65,7 +65,7 @@ public class GoogleSheets {
         }
 
             //запись формулы в табличку
-        public void WriteFormula(String formula, String cell, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
+        public void writeFormula(String formula, String cell, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
             //String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
             sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange body = new ValueRange()
@@ -79,7 +79,7 @@ public class GoogleSheets {
                 .execute();
         }
 
-        public String[] ReadSheet(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
+        public String[] readSheetCol(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
             sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange response = sheetsService.spreadsheets().values()
                     .get(SPREADSHEETS_ID, range)
@@ -88,12 +88,27 @@ public class GoogleSheets {
             List<List<Object>> values = response.getValues();
             int n = values.size();
             String[] answer = new String[n];
-            if (values == null || values.isEmpty()) {
-                System.out.println("No data found.");
-            } else {
-                int i = 0;
-                for (List row : values) {
-                    answer[i] = row.get(0).toString();
+            int i = 0;
+            for (List row : values) {
+                answer[i] = row.get(0).toString();
+                i++;
+            }
+            return answer;
+        }
+
+        public String[] readSheetRow(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
+            sheetsService = getSheetsService(APPLICATION_NAME);
+            ValueRange response = sheetsService.spreadsheets().values()
+                    .get(SPREADSHEETS_ID, range)
+                    .execute();
+
+            List<List<Object>> values = response.getValues();
+            int n = values.get(0).size();
+            String[] answer = new String[n];
+            int i = 0;
+            for (List row : values) {
+                for (Object pat : row) {
+                    answer[i] = pat.toString();
                     i++;
                 }
             }
