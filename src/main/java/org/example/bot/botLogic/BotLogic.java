@@ -13,7 +13,7 @@ import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToU
 
 public class BotLogic {
     SimpleBot answeringBot = new SimpleBot();
-    public ResponseToUserAndEventType getReply(String message, String user_ID, Boolean fileIsEmpty) throws GeneralSecurityException, IOException {
+    public ResponseToUserAndEventType getReply(String message, String user_ID, Boolean fileIsEmpty, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
         if (message.equals("/start")) {
             r.response = "Привет, я Супа-дупа, а кто ты?";
@@ -25,7 +25,7 @@ public class BotLogic {
             r.event = message;
             return r;
         }
-        return answeringBot.sayInReturn(message, user_ID);
+        return answeringBot.sayInReturn(message, user_ID, APPLICATION_NAME, SPREADSHEETS_ID);
     }
 
 }

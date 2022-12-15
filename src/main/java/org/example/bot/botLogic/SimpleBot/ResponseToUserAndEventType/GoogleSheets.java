@@ -24,8 +24,8 @@ import java.util.List;
 
 public class GoogleSheets {
         private static Sheets sheetsService;
-        private static String APPLICATION_NAME = "Google Sheets fot TG-bot";
-        private static String SPREADSHEETS_ID = "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw";
+        //private static String APPLICATION_NAME = "Google Sheets fot TG-bot";
+        //private static String SPREADSHEETS_ID = "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw";
 
         private Credential authorize() throws IOException, GeneralSecurityException {
             InputStream in = GoogleSheets.class.getResourceAsStream("/credentials.json");
@@ -47,7 +47,7 @@ public class GoogleSheets {
             return credential;
         }
 
-        public Sheets getSheetsService() throws IOException, GeneralSecurityException {
+        public Sheets getSheetsService(String APPLICATION_NAME) throws IOException, GeneralSecurityException {
             Credential credential = authorize();
             return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                     JacksonFactory.getDefaultInstance(), credential)
@@ -55,8 +55,8 @@ public class GoogleSheets {
                     .build();
         }
 
-        public String GetColumn(String range) throws IOException, GeneralSecurityException {
-            sheetsService = getSheetsService();
+        public String GetColumn(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
+            sheetsService = getSheetsService(APPLICATION_NAME);
             //String range = "B16";
 
             Sheets.Spreadsheets.Values.Get request = sheetsService.spreadsheets().values()
@@ -68,9 +68,9 @@ public class GoogleSheets {
         }
 
             //запись формулы в табличку
-        public void WriteFormula(String formula, String cell) throws IOException, GeneralSecurityException {
+        public void WriteFormula(String formula, String cell, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
             //String formula = "=XMATCH(\"" + pattern + "\";A1:AR1)";
-            sheetsService = getSheetsService();
+            sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange body = new ValueRange()
                 .setValues(Arrays.asList(
                         Arrays.asList(formula)
@@ -82,9 +82,9 @@ public class GoogleSheets {
                 .execute();
         }
 
-        public String[] ReadSheet(String range) throws IOException, GeneralSecurityException {
+        public String[] ReadSheet(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
             //String range = "A:A";
-            sheetsService = getSheetsService();
+            sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange response = sheetsService.spreadsheets().values()
                     .get(SPREADSHEETS_ID, range)
                     .execute();

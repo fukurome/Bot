@@ -1,19 +1,31 @@
 package org.example.bot;
 
+import org.aopalliance.reflect.Class;
 import org.example.bot.botLogic.*;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.io.*;
-import java.security.GeneralSecurityException;
 
 import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
+public class Bot {
+    public String APPLICATION_NAME;
+    public String SPREADSHEETS_ID;
+    public void makeBot() throws TelegramApiException {
+        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+        botsApi.registerBot(new SupaBot());
+    }
 
-public class SupaBot extends TelegramLongPollingBot {
-   @Override
+
+public class SupaBot extends TelegramLongPollingBot  {
+    @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -24,7 +36,7 @@ public class SupaBot extends TelegramLongPollingBot {
             BotLogic bot = new BotLogic();
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
-                ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello); //вместо reply - новый класс "ответ пользователю и вид события"
+                ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello, APPLICATION_NAME, SPREADSHEETS_ID);
                 if ((reply.event).equals("new user"))
                     repository.addUser(user_ID);
                 if (sayHello)
@@ -33,7 +45,7 @@ public class SupaBot extends TelegramLongPollingBot {
                     repository.saveData((reply.event), user_ID);
                 message.setText(reply.response);
 
-                execute(message); // Call method to send the message
+                execute(message);
             }
             catch (Exception e) {
                 System.err.println("Error");
@@ -67,4 +79,4 @@ public class SupaBot extends TelegramLongPollingBot {
    }
 
 }
-
+}

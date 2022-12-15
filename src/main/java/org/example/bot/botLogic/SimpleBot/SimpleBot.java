@@ -95,7 +95,7 @@ public class SimpleBot {
         random = new Random();
     }
 
-    public ResponseToUserAndEventType sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
+    public ResponseToUserAndEventType sayInReturn(String message, String user_ID, String APPLICATION_NAME, String SPREADSHEETS_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
         String answer = "";
         String key = "common";
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
@@ -112,7 +112,7 @@ public class SimpleBot {
         if (message.trim().endsWith("?"))
             range = "B:B";
         else range = "A:A";
-        String respond[] = sheet.ReadSheet(range);
+        String respond[] = sheet.ReadSheet(range, APPLICATION_NAME, SPREADSHEETS_ID);
         r.response = respond[random.nextInt(respond.length)];
         String convertedMessage = String.join(" ", message.toLowerCase().split("[ {,|.}?]+"));
         for (Map.Entry<String, String> o : PATTERNS_FOR_ANALYSIS.entrySet()) {
@@ -120,7 +120,7 @@ public class SimpleBot {
             if (pattern.matcher(convertedMessage).find()) {
                 if (o.getValue().equals("ANECDOTE"))
                 {
-                    String say[] = sheet.ReadSheet("C:C");
+                    String say[] = sheet.ReadSheet("C:C", APPLICATION_NAME, SPREADSHEETS_ID);
                     while (true) {
                         if (repository.getLineCountByReader(user_ID) == false) {
                             r.response = "Я рассказал все анекдоты :(";
@@ -136,11 +136,11 @@ public class SimpleBot {
                 }
                 String responsePattern = o.getValue();
                 String formula = "=XMATCH(\"" + responsePattern + "\";D2:X2)";
-                sheet.WriteFormula(formula, "A1");
+                sheet.WriteFormula(formula, "A1", APPLICATION_NAME, SPREADSHEETS_ID);
                 formula = "=REPLACE(ADDRESS(2;A1;4); 2; 1; \"\")";
-                sheet.WriteFormula(formula, "B1");
-                String patternColumn = sheet.GetColumn("B1");
-                String say[] = sheet.ReadSheet(patternColumn + ":" + patternColumn);
+                sheet.WriteFormula(formula, "B1", APPLICATION_NAME, SPREADSHEETS_ID);
+                String patternColumn = sheet.GetColumn("B1", APPLICATION_NAME, SPREADSHEETS_ID);
+                String say[] = sheet.ReadSheet(patternColumn + ":" + patternColumn, APPLICATION_NAME, SPREADSHEETS_ID);
                 System.out.println(say);
                 r.response = say[random.nextInt(say.length)];
                 r.event = o.getValue();
@@ -149,11 +149,11 @@ public class SimpleBot {
                     if (linkPattern.matcher(convertedMessage).find()) {
                         responsePattern = link.getValue();
                         formula = "=XMATCH(\"" + responsePattern + "\";D2:X2)";
-                        sheet.WriteFormula(formula, "C1");
+                        sheet.WriteFormula(formula, "C1", APPLICATION_NAME, SPREADSHEETS_ID);
                         formula = "=REPLACE(ADDRESS(2;C1;4); 2; 1; \"\")";
-                        sheet.WriteFormula(formula, "D1");
-                        patternColumn = sheet.GetColumn("D1");
-                        String links[] = sheet.ReadSheet(patternColumn + ":" + patternColumn);
+                        sheet.WriteFormula(formula, "D1", APPLICATION_NAME, SPREADSHEETS_ID);
+                        patternColumn = sheet.GetColumn("D1", APPLICATION_NAME, SPREADSHEETS_ID);
+                        String links[] = sheet.ReadSheet(patternColumn + ":" + patternColumn, APPLICATION_NAME, SPREADSHEETS_ID);
                         r.response = say[random.nextInt(say.length)] + links[random.nextInt(links.length)];
                     }
                 }

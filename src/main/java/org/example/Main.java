@@ -2,9 +2,8 @@ package org.example;
 
 import org.example.bot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -13,13 +12,17 @@ import java.security.GeneralSecurityException;
 public class Main {
     public static void main(String[] args) {
         try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new SupaBot());
+            String APPLICATION_NAME = "Google Sheets fot TG-bot";
+            String SPREADSHEETS_ID = "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw";
+            Bot supaDupa = new Bot();
+            supaDupa.APPLICATION_NAME = APPLICATION_NAME;
+            supaDupa.SPREADSHEETS_ID = SPREADSHEETS_ID;
+            supaDupa.makeBot();
         }catch (TelegramApiException e) {
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Error");
-        }  new GeneralSecurityException("Error");
+        }  new GeneralSecurityException("Error1");
 
     }
 }
