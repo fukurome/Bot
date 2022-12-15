@@ -24,9 +24,6 @@ import java.util.List;
 
 public class GoogleSheets {
         private static Sheets sheetsService;
-        //private static String APPLICATION_NAME = "Google Sheets fot TG-bot";
-        //private static String SPREADSHEETS_ID = "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw";
-
         private Credential authorize() throws IOException, GeneralSecurityException {
             InputStream in = GoogleSheets.class.getResourceAsStream("/credentials.json");
             GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
@@ -83,7 +80,6 @@ public class GoogleSheets {
         }
 
         public String[] ReadSheet(String range, String APPLICATION_NAME, String SPREADSHEETS_ID) throws IOException, GeneralSecurityException {
-            //String range = "A:A";
             sheetsService = getSheetsService(APPLICATION_NAME);
             ValueRange response = sheetsService.spreadsheets().values()
                     .get(SPREADSHEETS_ID, range)
