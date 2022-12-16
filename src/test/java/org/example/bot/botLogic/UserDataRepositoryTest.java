@@ -11,7 +11,6 @@ class UserDataRepositoryTest {
     @Test
     void presenceOfAnAnecdote() throws IOException {
         UserDataRepository repository = new UserDataRepository();
-
-        assertEquals(false, repository.presenceOfAnAnecdote("123", "anecdote1"));
+        assertEquals(false, repository.presenceOfAnAnecdote("123", "anecdote"));
     }
 }

@@ -88,58 +88,6 @@ public class SimpleBot {
         put("увидимся", "bye");
         put("до\\s.*свидания", "bye");
     }};
-    final Map<String, String> JOKE2 = new HashMap<String, String>() {{
-        put("— Я худею.\n— Давно?\n— Почти полчаса.\n— Заметно уже.\n— Правда?\n— Ага. Глаза голодные.", "anecdote1");
-        put("Штирлиц сидел у окна. Из окна дуло. Штирлиц прикрыл форточку и дуло исчезло.", "anecdote2");
-        put("В дверь постучали 9 раз.\n- Не угадаешь! - подумал Мюллер с осьминогом в руке.\nДома никого не было.", "anecdote3");
-        put("Штирлиц долго смотрел в одну точку. Потом в другую. Двоеточие - наконец-то догадался Штирлиц.", "anecdote4");
-        put("Гиммлер вызывает своего сотрудника.\n" +
-                "- Назовите двузначное число.\n" +
-                "- 45.\n" +
-                "- А почему не 54?\n" +
-                "- потому что 45!\n" +
-                "Гиммлер пишет характеристику \"характер нордический\" и вызывает следующего.\n" +
-                "- Назовите двузначное число.\n" +
-                "- 28.\n" +
-                "- А почему не 82?\n" +
-                "- Можно, конечно, и 82, но лучше 28.\n" +
-                "Гиммлер пишет характеристику \"характер близок к нордическому\" и вызывает следующего.\n" +
-                "- Назовите двузначное число.\n" +
-                "- 33.\n" +
-                "- А почему не... А, это Вы, Штирлиц.", "anecdote5");
-        put("Прогуливаясь по лесу, Штирлиц заглянул в дупло. На него смотрели чьи-то глаза.\n" +
-                "- Дятел, - подумал Штирлиц.\n- Сам ты дятел, - подумал Мюллер.", "anecdote6");
-    }};
-    final String[] JOKE = {
-            "— Я худею.\n— Давно?\n— Почти полчаса.\n— Заметно уже.\n— Правда?\n— Ага. Глаза голодные.",
-            "Штирлиц сидел у окна. Из окна дуло. Штирлиц прикрыл форточку и дуло исчезло.",
-            "В дверь постучали 9 раз.\n- Не угадаешь! - подумал Мюллер с осьминогом в руке.\nДома никого не было.",
-            "Штирлиц долго смотрел в одну точку. Потом в другую. Двоеточие - наконец-то догадался Штирлиц.",
-            "Гиммлер вызывает своего сотрудника.\n" +
-                    "- Назовите двузначное число.\n" +
-                    "- 45.\n" +
-                    "- А почему не 54?\n" +
-                    "- потому что 45!\n" +
-                    "Гиммлер пишет характеристику \"характер нордический\" и вызывает следующего.\n" +
-                    "- Назовите двузначное число.\n" +
-                    "- 28.\n" +
-                    "- А почему не 82?\n" +
-                    "- Можно, конечно, и 82, но лучше 28.\n" +
-                    "Гиммлер пишет характеристику \"характер близок к нордическому\" и вызывает следующего.\n" +
-                    "- Назовите двузначное число.\n" +
-                    "- 33.\n" +
-                    "- А почему не... А, это Вы, Штирлиц.",
-            "Прогуливаясь по лесу, Штирлиц заглянул в дупло. На него смотрели чьи-то глаза.\n" +
-                    "- Дятел, - подумал Штирлиц.\n- Сам ты дятел, - подумал Мюллер."
-    };
-
-    final Map<String, String[]> ANSWERS_BY_PATTERNS = new HashMap<String, String[]>() {
-        {
-            put("anecdote", JOKE);
-        }
-    };
-
-
     Pattern pattern; // for regexp
     Random random; // for random answers
     GoogleSheets googleSheets = new GoogleSheets();
@@ -163,7 +111,7 @@ public class SimpleBot {
             Pattern linkPattern = Pattern.compile(link.getKey());
             if (linkPattern.matcher(convertedMessage).find()) {
                 int colOfPattern = find(patternsOfAnswers, link.getValue().toUpperCase() + "_LINKS");
-                String links[] = googleSheets.readSheetCol("R2C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+                String links[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
                 return links[random.nextInt(links.length)];
             }
         }
@@ -188,16 +136,6 @@ public class SimpleBot {
         String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
         return answers[random.nextInt(answers.length)];
     }
-
-    public ResponseToUserAndEventType endOfJokes(ResponseToUserAndEventType r, String user_ID, int arrayLen) throws IOException {
-        if (repository.getLineCountByReader(user_ID, arrayLen) == false) {
-            r.response = "Я рассказал все анекдоты :(";
-            r.event = "anecdote";
-            return r;
-        }
-        return r;
-    }
-
     public ResponseToUserAndEventType chooseAnecdote(Map.Entry<String, String> map, ResponseToUserAndEventType r, String user_ID, String convertedMessage, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
         int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
         String say[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
@@ -209,15 +147,14 @@ public class SimpleBot {
         while (true) {
             String jokeTypes[] = googleSheets.readSheetCol("R3C" + (colOfPattern + 1) + ":R12C" + (colOfPattern + 1), APPLICATION_NAME, SPREADSHEETS_ID);
             for (int i = 0; i < jokeTypes.length; ++i) {
-                if (jokeTypes[i].contains(event)) {
-                    if (repository.presenceOfAnAnecdote(user_ID, jokeTypes[i])) {
-                        r.response = say[i];
-                        r.event = jokeTypes[i];
-                        return r;
-                    } else r = endOfJokes(r, user_ID, say.length);
-
+                if (jokeTypes[i].contains(event) && repository.presenceOfAnAnecdote(user_ID, jokeTypes[i])) {
+                    r.response = say[i];
+                    r.event = jokeTypes[i];
+                    return r;
                 }
             }
+            r.response = "Я рассказал все анекдоты :(";
+            r.event = "anecdote";
             return r;
         }
     }
@@ -233,30 +170,8 @@ public class SimpleBot {
             pattern = Pattern.compile(map.getKey());
             if (pattern.matcher(convertedMessage).find()) {
                 if (map.getValue().equals("anecdote")) {
-                    //r = chooseAnecdote(map, r, user_ID, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
-                    int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
-                    String say[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
-                    //String say[] = ANSWERS_BY_PATTERNS.get(map.getValue());
-                    String event = "anecdote";
-                    if (convertedMessage.contains("мюллер"))
-                        event = "anecdotem";
-                    if (convertedMessage.contains("штирлиц"))
-                        event = "anecdotesh";
-                    while (true) {
-                        if (repository.getLineCountByReader(user_ID, say.length) == false) {
-                            r.response = "Я рассказал все анекдоты :(";
-                            r.event = "anecdote";
-                            return r;
-                        }
-                        String jokeTypes[] = googleSheets.readSheetCol("R3C" + (colOfPattern + 1) + ":R12C" + (colOfPattern + 1), APPLICATION_NAME, SPREADSHEETS_ID);
-                        for (int i = 0; i < jokeTypes.length; ++i) {
-                            if (jokeTypes[i].contains(event) && repository.presenceOfAnAnecdote(user_ID, jokeTypes[i])) {
-                                r.response = say[i];
-                                r.event = jokeTypes[i];
-                                return r;
-                            }
-                        }
-                    }
+                    r = chooseAnecdote(map, r, user_ID, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+                    return r;
                 }
                 r.response = chooseAnswer(map, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID) + chooseLink(convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
                 r.event = map.getValue();

@@ -25,9 +25,10 @@ public class UserDataRepository {
         File file = new File(directory +"/" + user_ID + ".txt");
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
+        String line = "";
         try {
-            while (reader.readLine() != null) {
-                if (reader.readLine() == word) {
+            while ((line = reader.readLine()) != null) {
+                if (line.equals(word)) {
                     return false;
                 }
             }
