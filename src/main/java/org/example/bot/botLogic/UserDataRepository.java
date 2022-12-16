@@ -37,26 +37,6 @@ public class UserDataRepository {
         }
         return true;
     }
-        
-    public boolean getLineCountByReader(String user_ID, int wordsAmount) throws IOException {
-        String directory = getUserData(user_ID);
-        File file = new File(directory +"/" + user_ID + ".txt");
-        FileReader fr = new FileReader(file);
-        BufferedReader reader = new BufferedReader(fr);
-        String line = "";
-        int count = 0;
-        try {
-            while (reader.readLine() != null) {
-                count += 1;
-            }
-        } finally {
-            reader.close();
-        }
-        if (count >= wordsAmount+1) {
-            return false;
-        }
-        return true;
-    }
 
     public void addUser(String user_ID) throws IOException {
         String filePath = directory +"/" + user_ID + ".txt";
