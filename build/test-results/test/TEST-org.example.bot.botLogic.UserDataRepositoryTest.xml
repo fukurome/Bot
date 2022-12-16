@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.bot.botLogic.UserDataRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-12-16T13:09:14" hostname="LAPTOP-4R58P7VE" time="0.03">
-  <properties/>
-  <testcase name="presenceOfAnAnecdote()" classname="org.example.bot.botLogic.UserDataRepositoryTest" time="0.03"/>
-  <system-out><![CDATA[anecdote
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
