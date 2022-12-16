@@ -43,8 +43,8 @@ public class SimpleBot {
         //anecdote
         put("анекдот", "anecdote");
         put("шутк", "anecdote");
-        put("мюллер", "anecdotem");
-        put("штирлиц", "anecdotesh");
+        //put("мюллер", "anecdotem");
+        //put("штирлиц", "anecdotesh");
         //reaction
         put("смешно", "reaction");
         put("несмешно", "reaction");
@@ -134,20 +134,22 @@ public class SimpleBot {
     };
 
     final Map<String, String[]> ANSWERS_BY_PATTERNS = new HashMap<String, String[]>() {
-    {
-        put("anecdote", JOKE);
-    }};
+        {
+            put("anecdote", JOKE);
+        }
+    };
 
 
     Pattern pattern; // for regexp
     Random random; // for random answers
     GoogleSheets googleSheets = new GoogleSheets();
+    UserDataRepository repository = new UserDataRepository();
 
     public SimpleBot() {
         random = new Random();
     }
 
-    public static<String> int find(String[] arr, String target) {
+    public static <String> int find(String[] arr, String target) {
         //return Iterators.indexOf(Iterators.forArray(arr), x -> x.equals(target));
         for (int i = 0; i < arr.length; ++i) {
             if (arr[i].equals(target))
@@ -167,55 +169,96 @@ public class SimpleBot {
         }
         return "";
     }
-    public String chooseAnswer(String convertedMessage, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
-        for (Map.Entry<String, String> map : PATTERNS_FOR_ANALYSIS.entrySet()) {
-            pattern = Pattern.compile(map.getKey());
-            if (pattern.matcher(convertedMessage).find()) {
-                int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
-                String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
-                return answers[random.nextInt(answers.length)];
-            }
+
+    public String chooseAnswer(Map.Entry<String, String> map, String convertedMessage, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
+        if (pattern.matcher(convertedMessage).find()) {
+            int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
+            String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+            return answers[random.nextInt(answers.length)];
         }
         return "";
     }
+
     public String commonAnswer(String message, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
-        String pattern;
+        String target;
         if (message.trim().endsWith("?"))
-            pattern = "ELUSIVE_ANSWERS";
-        else pattern = "COMMON_PHRASES";
-        int colOfPattern = find(patternsOfAnswers, pattern);
-        String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern +":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+            target = "ELUSIVE_ANSWERS";
+        else target = "COMMON_PHRASES";
+        int colOfPattern = find(patternsOfAnswers, target);
+        String answers[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
         return answers[random.nextInt(answers.length)];
     }
 
+    public ResponseToUserAndEventType endOfJokes(ResponseToUserAndEventType r, String user_ID, int arrayLen) throws IOException {
+        if (repository.getLineCountByReader(user_ID, arrayLen) == false) {
+            r.response = "Я рассказал все анекдоты :(";
+            r.event = "anecdote";
+            return r;
+        }
+        return r;
+    }
+
+    public ResponseToUserAndEventType chooseAnecdote(Map.Entry<String, String> map, ResponseToUserAndEventType r, String user_ID, String convertedMessage, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
+        int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
+        String say[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+        String event = "anecdote";
+        if (convertedMessage.contains("мюллер"))
+            event = "anecdotem";
+        if (convertedMessage.contains("штирлиц"))
+            event = "anecdotesh";
+        while (true) {
+            String jokeTypes[] = googleSheets.readSheetCol("R3C" + (colOfPattern + 1) + ":R12C" + (colOfPattern + 1), APPLICATION_NAME, SPREADSHEETS_ID);
+            for (int i = 0; i < jokeTypes.length; ++i) {
+                if (jokeTypes[i].contains(event)) {
+                    if (repository.presenceOfAnAnecdote(user_ID, jokeTypes[i])) {
+                        r.response = say[i];
+                        r.event = jokeTypes[i];
+                        return r;
+                    } else r = endOfJokes(r, user_ID, say.length);
+
+                }
+            }
+            return r;
+        }
+    }
+
     public ResponseToUserAndEventType sayInReturn(String message, String user_ID, String APPLICATION_NAME, String SPREADSHEETS_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
-        String answer= "";
+        String answer = "";
         String key = "common";
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
-        UserDataRepository repository = new UserDataRepository();
         String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", APPLICATION_NAME, SPREADSHEETS_ID);
         answer = commonAnswer(message, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
         String convertedMessage = String.join(" ", message.toLowerCase().split("[ {,|.}?]+"));
         for (Map.Entry<String, String> map : PATTERNS_FOR_ANALYSIS.entrySet()) {
             pattern = Pattern.compile(map.getKey());
             if (pattern.matcher(convertedMessage).find()) {
-                if (map.getValue().equals("anecdote"))
-                {
-                    String say[] = ANSWERS_BY_PATTERNS.get(map.getValue());
+                if (map.getValue().equals("anecdote")) {
+                    //r = chooseAnecdote(map, r, user_ID, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+                    int colOfPattern = find(patternsOfAnswers, map.getValue().toUpperCase());
+                    String say[] = googleSheets.readSheetCol("R3C" + colOfPattern + ":R12C" + colOfPattern, APPLICATION_NAME, SPREADSHEETS_ID);
+                    //String say[] = ANSWERS_BY_PATTERNS.get(map.getValue());
+                    String event = "anecdote";
+                    if (convertedMessage.contains("мюллер"))
+                        event = "anecdotem";
+                    if (convertedMessage.contains("штирлиц"))
+                        event = "anecdotesh";
                     while (true) {
-                        if (repository.getLineCountByReader(user_ID) == false) {
+                        if (repository.getLineCountByReader(user_ID, say.length) == false) {
                             r.response = "Я рассказал все анекдоты :(";
                             r.event = "anecdote";
                             return r;
                         }
-                        r.response = say[random.nextInt(say.length)];
-                        r.event = JOKE2.get(r.response);
-                        if (repository.presenceOfAnAnecdote(user_ID, r.event)) {
-                            return r;
+                        String jokeTypes[] = googleSheets.readSheetCol("R3C" + (colOfPattern + 1) + ":R12C" + (colOfPattern + 1), APPLICATION_NAME, SPREADSHEETS_ID);
+                        for (int i = 0; i < jokeTypes.length; ++i) {
+                            if (jokeTypes[i].contains(event) && repository.presenceOfAnAnecdote(user_ID, jokeTypes[i])) {
+                                r.response = say[i];
+                                r.event = jokeTypes[i];
+                                return r;
+                            }
                         }
                     }
                 }
-                r.response = chooseAnswer(convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID) + chooseLink(convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+                r.response = chooseAnswer(map, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID) + chooseLink(convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
                 r.event = map.getValue();
                 return r;
             }
@@ -224,4 +267,5 @@ public class SimpleBot {
         r.event = key;
         return r;
     }
+
 }

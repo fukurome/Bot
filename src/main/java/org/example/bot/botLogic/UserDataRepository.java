@@ -37,7 +37,7 @@ public class UserDataRepository {
         return true;
     }
         
-    public boolean getLineCountByReader(String user_ID) throws IOException {
+    public boolean getLineCountByReader(String user_ID, int wordsAmount) throws IOException {
         String directory = getUserData(user_ID);
         File file = new File(directory +"/" + user_ID + ".txt");
         FileReader fr = new FileReader(file);
@@ -51,7 +51,7 @@ public class UserDataRepository {
         } finally {
             reader.close();
         }
-        if (count >= 7) {
+        if (count >= wordsAmount+1) {
             return false;
         }
         return true;
