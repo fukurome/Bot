@@ -13,34 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SimpleBotTest {
-
-    @Test
-    void find() throws GeneralSecurityException, IOException {
-        SimpleBot sd = new SimpleBot();
-        GoogleSheets googleSheets = new GoogleSheets();
-        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
-        //int c = sd.find(patternsOfAnswers,"ELUSIVE_ANSWERS");
-        //assertEquals(2, c);
-    }
-
-    @Test
-    void chooseLinkTest() throws GeneralSecurityException, IOException {
-        SimpleBot sd = new SimpleBot();
-        GoogleSheets googleSheets = new GoogleSheets();
-        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
-        //String a = sd.chooseLink("грустно", patternsOfAnswers, "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
-        //assertEquals("Привет", a);
-    }
-    @Test
-    void chooseAnswerTest() throws GeneralSecurityException, IOException {
-        SimpleBot sd = new SimpleBot();
-        GoogleSheets googleSheets = new GoogleSheets();
-        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
-
-        //String a = sd.chooseAnswer(Map.Entry<String,String> map, pattern "привет", patternsOfAnswers, "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
-        //assertEquals("Привет", a);
-    }
-
     @Test
     void sayInReturn() throws GeneralSecurityException, IOException {
         SimpleBot sd = new SimpleBot();

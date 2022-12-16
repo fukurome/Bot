@@ -12,12 +12,10 @@ public class AnswerChooser {
     GoogleSheets googleSheets = new GoogleSheets();
     UserDataRepository repository = new UserDataRepository();
     Random random;
-    //Pattern pattern;
     public AnswerChooser() {
         random = new Random();
     }
     public static <String> int find(String[] arr, String target) {
-        //return Iterators.indexOf(Iterators.forArray(arr), x -> x.equals(target));
         for (int i = 0; i < arr.length; ++i) {
             if (arr[i].equals(target))
                 return i + 1;
