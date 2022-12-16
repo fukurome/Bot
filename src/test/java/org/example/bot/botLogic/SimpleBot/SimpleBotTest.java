@@ -22,6 +22,23 @@ class SimpleBotTest {
     }
 
     @Test
+    void chooseLinkTest() throws GeneralSecurityException, IOException {
+        SimpleBot sd = new SimpleBot();
+        GoogleSheets googleSheets = new GoogleSheets();
+        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
+        String a = sd.chooseLink("грустно", patternsOfAnswers, "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
+        assertEquals("Привет", a);
+    }
+    @Test
+    void chooseAnswerTest() throws GeneralSecurityException, IOException {
+        SimpleBot sd = new SimpleBot();
+        GoogleSheets googleSheets = new GoogleSheets();
+        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
+        String a = sd.chooseAnswer("привет", patternsOfAnswers, "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
+        assertEquals("Привет", a);
+    }
+
+    @Test
     void sayInReturn() throws GeneralSecurityException, IOException {
         SimpleBot sd = new SimpleBot();
         ResponseToUserAndEventType t = sd.sayInReturn("Привет", "123", "Google Sheets fot TG-bot", "1XK3jhU6eMbn4Ly2neSeBDQwyoP1bp5ZO0rhqQd17iFw");
