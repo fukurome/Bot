@@ -102,7 +102,7 @@ public class SimpleBot {
         String answer = "";
         String key = "common";
         ResponseToUserAndEventType r = new ResponseToUserAndEventType();
-        String patternsOfAnswers[] = googleSheets.readSheetRow("R2C1:R2C25", APPLICATION_NAME, SPREADSHEETS_ID);
+        String patternsOfAnswers[] = answerChooser.makeArrayOfPatterns(APPLICATION_NAME, SPREADSHEETS_ID);
         answer = answerChooser.commonAnswer(message, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
         String convertedMessage = String.join(" ", message.toLowerCase().split("[ {,|.}?]+"));
         for (Map.Entry<String, String> map : PATTERNS_FOR_ANALYSIS.entrySet()) {

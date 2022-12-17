@@ -22,6 +22,9 @@ public class AnswerChooser {
         }
         return -1;
     }
+    public String[] makeArrayOfPatterns(String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
+       return googleSheets.readSheetRow("R2C1:R2C25", APPLICATION_NAME, SPREADSHEETS_ID);
+    }
     public String chooseLink(Map.Entry<String, String> link, String convertedMessage, String[] patternsOfAnswers, String APPLICATION_NAME, String SPREADSHEETS_ID) throws GeneralSecurityException, IOException {
         Pattern linkPattern = Pattern.compile(link.getKey());
         if (linkPattern.matcher(convertedMessage).find()) {
