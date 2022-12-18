@@ -1,4 +1,5 @@
-tokens
-.gradle
-!/.idea/
+tokens/
+.gradle/
+.idea/
+build/
 C:\Users\Irina Shingalova\Documents\GitHub\Bot\src\main\resources\credentials.json
