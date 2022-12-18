@@ -18,6 +18,7 @@ public class Main {
             supaDupa.APPLICATION_NAME = APPLICATION_NAME;
             supaDupa.SPREADSHEETS_ID = SPREADSHEETS_ID;
             supaDupa.makeBot();
+
         }catch (TelegramApiException e) {
             e.printStackTrace();
         } catch (Exception e) {
