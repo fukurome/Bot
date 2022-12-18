@@ -48,7 +48,7 @@ public class SupaBot extends TelegramLongPollingBot  {
                 execute(message);
             }
             catch (Exception e) {
-                System.err.println("Error");
+                System.err.println(e.toString());
             }
 
 

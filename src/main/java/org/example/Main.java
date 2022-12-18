@@ -22,7 +22,7 @@ public class Main {
         }catch (TelegramApiException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Error");
+            System.err.println(e.toString());
         }  new GeneralSecurityException("Error1");
 
     }
