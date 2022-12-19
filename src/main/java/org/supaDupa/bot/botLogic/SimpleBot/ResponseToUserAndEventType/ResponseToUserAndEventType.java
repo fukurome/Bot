@@ -1,4 +1,4 @@
-package org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType;
+package org.supaDupa.bot.botLogic.SimpleBot.ResponseToUserAndEventType;
 
 public class ResponseToUserAndEventType {
     public String response;

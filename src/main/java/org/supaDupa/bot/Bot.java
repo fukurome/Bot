@@ -1,23 +1,27 @@
-package org.example.bot;
+package org.supaDupa.bot;
 
-import org.aopalliance.reflect.Class;
-import org.example.bot.botLogic.*;
+import org.supaDupa.bot.botLogic.BotLogic;
+import org.supaDupa.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
+import org.supaDupa.bot.botLogic.UserDataRepository;
+import org.supaDupa.bot.botLogic.*;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.io.*;
 
-import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
 public class Bot {
-    public String APPLICATION_NAME;
-    public String SPREADSHEETS_ID;
+    BotLogic bot;
+    UserDataRepository repository;
+    public Bot(BotLogic botLogic, UserDataRepository repository) {
+        this.bot = botLogic;
+        this.repository = repository;
+    }
     public void makeBot() throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(new SupaBot());
@@ -32,11 +36,11 @@ public class SupaBot extends TelegramLongPollingBot  {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
-            UserDataRepository repository = new UserDataRepository();
-            BotLogic bot = new BotLogic();
+            //UserDataRepository repository = new UserDataRepository();
+            //BotLogic bot = new BotLogic();
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
-                ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello, APPLICATION_NAME, SPREADSHEETS_ID);
+                ResponseToUserAndEventType reply = bot.getReply(update.getMessage().getText(), user_ID, sayHello);
                 if ((reply.event).equals("new user"))
                     repository.addUser(user_ID);
                 if (sayHello)
@@ -61,7 +65,7 @@ public class SupaBot extends TelegramLongPollingBot  {
 
     @Override
     public String getBotToken() {
-        File file = new File("C:\\Users\\dns\\IdeaProjects\\token.txt");
+        File file = new File("C:\\Users\\dns\\Desktop\\Bot\\token.txt");
         FileReader fr = null;
         try {
             fr = new FileReader(file);

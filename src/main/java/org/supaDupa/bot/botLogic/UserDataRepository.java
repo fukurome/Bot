@@ -1,4 +1,4 @@
-package org.example.bot.botLogic;
+package org.supaDupa.bot.botLogic;
 
 import java.io.*;
 

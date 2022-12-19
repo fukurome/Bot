@@ -1,17 +1,22 @@
-package org.example.bot.botLogic.SimpleBot;
+package org.supaDupa.bot.botLogic.SimpleBot;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.Iterators;
-import org.example.bot.botLogic.SimpleBot.ResponseToUserAndEventType.*;
-import org.example.bot.botLogic.UserDataRepository;
-import org.glassfish.grizzly.utils.ArrayUtils;
+import org.supaDupa.bot.botLogic.SimpleBot.ResponseToUserAndEventType.AnswerChooser;
+import org.supaDupa.bot.botLogic.SimpleBot.ResponseToUserAndEventType.ResponseToUserAndEventType;
+import org.supaDupa.bot.botLogic.SimpleBot.ResponseToUserAndEventType.*;
 
 
 public class SimpleBot {
+    AnswerChooser answerChooser;
+    ResponseToUserAndEventType r;
+    public SimpleBot(AnswerChooser answerChooser, ResponseToUserAndEventType response) {
+        this.answerChooser = answerChooser;
+        this.r = response;
+    }
     final Map<String, String> PATTERNS_FOR_LINKS = new HashMap<String, String>() {{
         put("груст", "sad");
         put("уныл", "sad");
@@ -89,35 +94,28 @@ public class SimpleBot {
         put("до\\s.*свидания", "bye");
     }};
     Pattern pattern; // for regexp
-    Random random; // for random answers
-    GoogleSheets googleSheets = new GoogleSheets();
 
-
-    public SimpleBot() {
-        random = new Random();
-    }
-
-    public ResponseToUserAndEventType sayInReturn(String message, String user_ID, String APPLICATION_NAME, String SPREADSHEETS_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
-        AnswerChooser answerChooser = new AnswerChooser();
+    public ResponseToUserAndEventType sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
+        //AnswerChooser answerChooser = new AnswerChooser();
         String answer = "";
         String key = "common";
-        ResponseToUserAndEventType r = new ResponseToUserAndEventType();
-        String patternsOfAnswers[] = answerChooser.makeArrayOfPatterns(APPLICATION_NAME, SPREADSHEETS_ID);
-        answer = answerChooser.commonAnswer(message, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+        String patternsOfAnswers[] = answerChooser.makeArrayOfPatterns();
+        answer = answerChooser.commonAnswer(message, patternsOfAnswers);
         String convertedMessage = String.join(" ", message.toLowerCase().split("[ {,|.}?]+"));
         for (Map.Entry<String, String> map : PATTERNS_FOR_ANALYSIS.entrySet()) {
             pattern = Pattern.compile(map.getKey());
             if (pattern.matcher(convertedMessage).find()) {
                 if (map.getValue().equals("anecdote")) {
-                    r = answerChooser.chooseAnecdote(map, r, user_ID, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+                    r = answerChooser.chooseAnecdote(map, user_ID, convertedMessage, patternsOfAnswers);
                     return r;
                 }
-                r.response = answerChooser.chooseAnswer(map, pattern, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
+                r.response = answerChooser.chooseAnswer(map.getValue().toUpperCase(), pattern, convertedMessage, patternsOfAnswers);
                 r.event = map.getValue();
                 String links = "";
                 for (Map.Entry<String, String> link : PATTERNS_FOR_LINKS.entrySet()) {
-                    links = answerChooser.chooseLink(link, convertedMessage, patternsOfAnswers, APPLICATION_NAME, SPREADSHEETS_ID);
-                    if (links != "") {
+                    Pattern linkPattern = Pattern.compile(link.getKey());
+                    if (linkPattern.matcher(convertedMessage).find()) {
+                        links = answerChooser.chooseLink(link.getValue().toUpperCase() + "_LINKS", patternsOfAnswers);
                         r.response += links;
                         return r;
                     }
