@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.io.*;
+import java.util.Properties;
 
 public class Bot {
     BotLogic bot;
@@ -65,22 +66,16 @@ public class SupaBot extends TelegramLongPollingBot  {
 
     @Override
     public String getBotToken() {
-        File file = new File("C:\\Users\\dns\\Desktop\\Bot\\token.txt");
-        FileReader fr = null;
+        Properties prop = new Properties();
         try {
-            fr = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            prop.load(Bot.class.getClassLoader().getResourceAsStream("config.properties"));
+            return prop.getProperty("token");
         }
-        BufferedReader reader = new BufferedReader(fr);
-        String line = null;
-        try {
-            line = reader.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        catch (IOException ex) {
+            ex.printStackTrace();
         }
-        return line;
-   }
+        return null;
+    }
 
 }
 }
