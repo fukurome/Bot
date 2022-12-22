@@ -7,6 +7,7 @@ import org.supaDupa.bot.botLogic.*;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
@@ -71,6 +72,7 @@ public class SupaBot extends TelegramLongPollingBot  {
                         break;
 
                     case "Назад":
+                        message.setText("Ок, возвращаю в главное меню");
                         typeOfKeyboard = "default";
                         keyboardMarkup = keyboard(typeOfKeyboard);
                         message.setReplyMarkup(keyboardMarkup);
@@ -93,7 +95,6 @@ public class SupaBot extends TelegramLongPollingBot  {
                 System.err.println(e.toString());
             }
 
-
         }
     }
     @Override
@@ -113,6 +114,7 @@ public class SupaBot extends TelegramLongPollingBot  {
         }
         return null;
     }
+
     public ReplyKeyboardMarkup keyboard(String typeOfKeyboard) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboardRows = new ArrayList<>();
