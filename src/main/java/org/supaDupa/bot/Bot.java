@@ -27,9 +27,13 @@ import java.util.Properties;
 public class Bot {
     BotLogic bot;
     UserDataRepository repository;
-    public Bot(BotLogic botLogic, UserDataRepository repository) {
+    ResponseToUserAndEventType reply;
+    Keyboard buttons;
+    public Bot(BotLogic botLogic, UserDataRepository repository, ResponseToUserAndEventType reply, Keyboard buttons) {
         this.bot = botLogic;
         this.repository = repository;
+        this.reply = reply;
+        this.buttons = buttons;
     }
     public void makeBot() throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
@@ -38,7 +42,6 @@ public class Bot {
 
 
 public class SupaBot extends TelegramLongPollingBot  {
-    String typeOfKeyboard = "default";
     @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
@@ -46,38 +49,31 @@ public class SupaBot extends TelegramLongPollingBot  {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
-            Keyboard hui = new Keyboard();
-            ReplyKeyboardMarkup keyboardMarkup = hui.keyboard(typeOfKeyboard);
-            message.setReplyMarkup(keyboardMarkup);
-            //UserDataRepository repository = new UserDataRepository();
-            //BotLogic bot = new BotLogic();
+            Keyboard buttons = new Keyboard();
+            ReplyKeyboardMarkup keyboardMarkup;
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
                 String messageText = update.getMessage().getText();
-                ResponseToUserAndEventType reply = new ResponseToUserAndEventType();
                 switch (messageText) {
                     case "Анекдот":
-                        /*message.setText("Какой анекдот хочешь? :)");*/
                         reply.response = "Какой анекдот хочешь? :)";
                         reply.event = "anecdote";
-                        typeOfKeyboard = "anecdote";
-                        /*execute(message);*/
+                        keyboardMarkup = buttons.keyboard(reply.event);
+                        message.setReplyMarkup(keyboardMarkup);
                         break;
                         
                     case "Поддержи меня, пожалуйста":
-                        /*message.setText("Что ты сейчас чувствуешь?");*/
                         reply.response = "Что ты сейчас чувствуешь?";
                         reply.event = "feelings";
-                        typeOfKeyboard = "feelings";
-                        /*execute(message);*/
+                        keyboardMarkup = buttons.keyboard(reply.event);
+                        message.setReplyMarkup(keyboardMarkup);
                         break;
 
                     case "Назад":
-                        /*message.setText("Ок, возвращаю в главное меню");*/
                         reply.response = "Ок, возвращаю в главное меню";
-                        reply.event = "default";
-                        typeOfKeyboard = "default";
-                        /*execute(message);*/
+                        reply.event = "defaultKeyboard";
+                        keyboardMarkup = buttons.keyboard(reply.event);
+                        message.setReplyMarkup(keyboardMarkup);
                         break;
                     default:
                         reply = bot.getReply(messageText, user_ID, sayHello);
@@ -89,8 +85,6 @@ public class SupaBot extends TelegramLongPollingBot  {
                 if ((reply.event).contains("anecdote"))
                     repository.saveData((reply.event), user_ID);
                 message.setText(reply.response);
-                keyboardMarkup = hui.keyboard(typeOfKeyboard);
-                message.setReplyMarkup(keyboardMarkup);
                 execute(message);
             }
             catch (Exception e) {

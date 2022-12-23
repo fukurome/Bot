@@ -15,9 +15,7 @@ public class BotLogic {
         this.simpleBot = simpleBot;
         this.r = response;
     }
-    //SimpleBot answeringBot = new SimpleBot();
     public ResponseToUserAndEventType getReply(String message, String user_ID, Boolean fileIsEmpty) throws GeneralSecurityException, IOException {
-        //ResponseToUserAndEventType r = new ResponseToUserAndEventType();
         if (message.equals("/start")) {
             r.response = "Привет, я Супа-дупа, а кто ты?";
             r.event = "new user";

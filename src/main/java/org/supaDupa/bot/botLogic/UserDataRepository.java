@@ -10,7 +10,6 @@ public class UserDataRepository {
     }
     public void saveData(String message, String user_ID) throws IOException {
         String filePath = directory + "/" + user_ID + ".txt";
-        File file = new File(filePath);
         FileWriter writer = new FileWriter(filePath, true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         try {

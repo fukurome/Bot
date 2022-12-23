@@ -48,8 +48,6 @@ public class SimpleBot {
         //anecdote
         put("анекдот", "anecdote");
         put("шутк", "anecdote");
-        //put("мюллер", "anecdotem");
-        //put("штирлиц", "anecdotesh");
         //reaction
         put("смешно", "reaction");
         put("несмешно", "reaction");
@@ -96,7 +94,6 @@ public class SimpleBot {
     Pattern pattern; // for regexp
 
     public ResponseToUserAndEventType sayInReturn(String message, String user_ID) throws FileNotFoundException, IOException, GeneralSecurityException {
-        //AnswerChooser answerChooser = new AnswerChooser();
         String answer = "";
         String key = "common";
         String patternsOfAnswers[] = answerChooser.makeArrayOfPatterns();

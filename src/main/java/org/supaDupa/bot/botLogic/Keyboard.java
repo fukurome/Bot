@@ -12,7 +12,7 @@ public class Keyboard {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
         switch (typeOfKeyboard) {
-            case "default":
+            case "defaultKeyboard":
                 row.add("Анекдот");
                 row.add("Поддержи меня, пожалуйста");
                 keyboardRows.add(row);
