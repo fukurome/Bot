@@ -46,37 +46,38 @@ public class SupaBot extends TelegramLongPollingBot  {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
             String user_ID = update.getMessage().getChatId().toString();
-            ReplyKeyboardMarkup keyboardMarkup = keyboard(typeOfKeyboard);
+            Keyboard hui = new Keyboard();
+            ReplyKeyboardMarkup keyboardMarkup = hui.keyboard(typeOfKeyboard);
             message.setReplyMarkup(keyboardMarkup);
             //UserDataRepository repository = new UserDataRepository();
             //BotLogic bot = new BotLogic();
             try {
                 Boolean sayHello = repository.isUserFileEmpty(user_ID);
                 String messageText = update.getMessage().getText();
-                ResponseToUserAndEventType reply = null;
+                ResponseToUserAndEventType reply = new ResponseToUserAndEventType();
                 switch (messageText) {
                     case "Анекдот":
-                        message.setText("Какой анекдот хочешь? :)");
+                        /*message.setText("Какой анекдот хочешь? :)");*/
+                        reply.response = "Какой анекдот хочешь? :)";
+                        reply.event = "anecdote";
                         typeOfKeyboard = "anecdote";
-                        keyboardMarkup = keyboard(typeOfKeyboard);
-                        message.setReplyMarkup(keyboardMarkup);
-                        execute(message);
+                        /*execute(message);*/
                         break;
                         
                     case "Поддержи меня, пожалуйста":
-                        message.setText("Что ты сейчас чувствуешь?");
+                        /*message.setText("Что ты сейчас чувствуешь?");*/
+                        reply.response = "Что ты сейчас чувствуешь?";
+                        reply.event = "feelings";
                         typeOfKeyboard = "feelings";
-                        keyboardMarkup = keyboard(typeOfKeyboard);
-                        message.setReplyMarkup(keyboardMarkup);
-                        execute(message);
+                        /*execute(message);*/
                         break;
 
                     case "Назад":
-                        message.setText("Ок, возвращаю в главное меню");
+                        /*message.setText("Ок, возвращаю в главное меню");*/
+                        reply.response = "Ок, возвращаю в главное меню";
+                        reply.event = "default";
                         typeOfKeyboard = "default";
-                        keyboardMarkup = keyboard(typeOfKeyboard);
-                        message.setReplyMarkup(keyboardMarkup);
-                        execute(message);
+                        /*execute(message);*/
                         break;
                     default:
                         reply = bot.getReply(messageText, user_ID, sayHello);
@@ -88,7 +89,8 @@ public class SupaBot extends TelegramLongPollingBot  {
                 if ((reply.event).contains("anecdote"))
                     repository.saveData((reply.event), user_ID);
                 message.setText(reply.response);
-
+                keyboardMarkup = hui.keyboard(typeOfKeyboard);
+                message.setReplyMarkup(keyboardMarkup);
                 execute(message);
             }
             catch (Exception e) {
@@ -114,52 +116,5 @@ public class SupaBot extends TelegramLongPollingBot  {
         }
         return null;
     }
-
-    public ReplyKeyboardMarkup keyboard(String typeOfKeyboard) {
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-        switch (typeOfKeyboard) {
-            case "default":
-                row.add("Анекдот");
-                row.add("Поддержи меня, пожалуйста");
-                keyboardRows.add(row);
-                keyboardMarkup.setKeyboard(keyboardRows);
-                break;
-            case "anecdote":
-                row.add("Анекдот про Штирлица");
-                row.add("Анекдот про Мюллера");
-                row.add("Рандомный анекдот");
-                keyboardRows.add(row);
-
-                row = new KeyboardRow();
-                row.add("Назад");
-                keyboardRows.add(row);
-
-                keyboardMarkup.setKeyboard(keyboardRows);
-                break;
-            case "feelings":
-                row.add("Грусть");
-                row.add("Одиночество");
-                row.add("Тревогу");
-                keyboardRows.add(row);
-
-                row = new KeyboardRow();
-                row.add("Злость");
-                row.add("Выгорание");
-                row.add("Отчаяние");
-                keyboardRows.add(row);
-
-                row = new KeyboardRow();
-                row.add("Назад");
-                keyboardRows.add(row);
-
-                keyboardMarkup.setKeyboard(keyboardRows);
-                break;
-        }
-
-        return keyboardMarkup;
-    }
-
 }
 }
