@@ -17,6 +17,7 @@ public class Keyboard {
                 row.add("Поддержи меня, пожалуйста");
                 keyboardRows.add(row);
                 keyboardMarkup.setKeyboard(keyboardRows);
+                keyboardMarkup.setResizeKeyboard(true);
                 break;
             case "anecdote":
                 row.add("Анекдот про Штирлица");
@@ -29,6 +30,7 @@ public class Keyboard {
                 keyboardRows.add(row);
 
                 keyboardMarkup.setKeyboard(keyboardRows);
+                keyboardMarkup.setResizeKeyboard(true);
                 break;
             case "feelings":
                 row.add("Грусть");
@@ -47,7 +49,7 @@ public class Keyboard {
                 keyboardRows.add(row);
 
                 keyboardMarkup.setKeyboard(keyboardRows);
-                /*keyboardMarkup.setResizeKeyboard(true);*/
+                keyboardMarkup.setResizeKeyboard(true);
                 break;
         }
 
