@@ -75,6 +75,10 @@ public class SupaBot extends TelegramLongPollingBot  {
                         keyboardMarkup = buttons.keyboard(reply.event);
                         message.setReplyMarkup(keyboardMarkup);
                         break;
+                    case "/start":
+                        reply = bot.getReply(messageText, user_ID, sayHello);
+                        keyboardMarkup = buttons.keyboard("defaultKeyboard");
+                        message.setReplyMarkup(keyboardMarkup);
                     default:
                         reply = bot.getReply(messageText, user_ID, sayHello);
                 }
